@@ -5,7 +5,7 @@ import { Send, Mic, Bot, User } from "lucide-react";
 export default function ChartBot() {
   const { t } = useI18n();
   const [messages, setMessages] = useState<{ sender: string; text: string }[]>([
-    { sender: "bot", text: t('chatbotHello') },
+    { sender: "bot", text: t("chatbotHello") },
   ]);
   const [input, setInput] = useState("");
   const [bottomOffset, setBottomOffset] = useState(16); // initial bottom offset
@@ -16,7 +16,7 @@ export default function ChartBot() {
 
   // Reset scroll position when component mounts
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'auto' });
+    window.scrollTo({ top: 0, behavior: "auto" });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
   }, []);
@@ -29,7 +29,7 @@ export default function ChartBot() {
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
-        { sender: "bot", text: t('chatbotThanks') },
+        { sender: "bot", text: t("chatbotThanks") },
       ]);
     }, 1000);
 
@@ -49,7 +49,8 @@ export default function ChartBot() {
   useEffect(() => {
     const handleResize = () => {
       const vh = window.innerHeight;
-      const keyboardHeight = window.innerHeight < document.documentElement.clientHeight ? 80 : 0;
+      const keyboardHeight =
+        window.innerHeight < document.documentElement.clientHeight ? 80 : 0;
       setBottomOffset(BOTTOM_NAV_HEIGHT + keyboardHeight + 16); // 16px padding
     };
     window.addEventListener("resize", handleResize);
@@ -61,14 +62,14 @@ export default function ChartBot() {
     <div className="flex flex-col h-[100vh] bg-primary-50">
       {/* Header */}
       <header className="bg-primary-600 text-white py-3 px-4 flex items-center justify-center shadow-md sticky top-0 z-10">
-        <h1 className="text-lg font-bold">{t('aiChatbotTitle')}</h1>
+        <h1 className="text-lg font-bold">{t("aiChatbotTitle")}</h1>
       </header>
 
       {/* Chat Area */}
       <div
         className="flex-1 overflow-y-auto px-4 py-3 space-y-4"
         style={{
-          maxHeight: `calc(100vh - 3rem - ${bottomOffset + 48}px)`, 
+          maxHeight: `calc(100vh - 3rem - ${bottomOffset + 48}px)`,
           // 3rem: header height, 48px: input section height
         }}
       >
@@ -96,33 +97,33 @@ export default function ChartBot() {
       </div>
 
       {/* Input Section */}
-<div
-  className="p-3 border-t bg-white flex items-center space-x-2 fixed left-0 w-full z-20"
-  style={{ bottom: `${bottomOffset}px` }}
->
-  <input
-    type="text"
-    value={input}
-    onChange={(e) => setInput(e.target.value)}
-    placeholder={t('typeMessage')}
-    className="flex-1 border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 min-w-0"
-    onKeyDown={(e) => e.key === "Enter" && handleSend()}
-    style={{ maxWidth: 'calc(100% - 96px)' }} 
-    // 96px = approx width of Mic + Send + spacing
-  />
-  <button
-    onClick={() => alert(t('voiceComingSoon'))}
-    className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 flex-shrink-0"
-  >
-    <Mic size={22} className="text-primary-600" />
-  </button>
-  <button
-    onClick={handleSend}
-    className="p-2 bg-primary-600 text-white rounded-full hover:bg-primary-700 flex-shrink-0"
-  >
-    <Send size={22} />
-  </button>
-</div>
+      <div
+        className="p-3 border-t bg-white flex items-center space-x-2 fixed left-0 w-full z-20"
+        style={{ bottom: `${bottomOffset}px` }}
+      >
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder={t("typeMessage")}
+          className="flex-1 border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500 min-w-0"
+          onKeyDown={(e) => e.key === "Enter" && handleSend()}
+          style={{ maxWidth: "calc(100% - 96px)" }}
+          // 96px = approx width of Mic + Send + spacing
+        />
+        <button
+          onClick={() => alert(t("voiceComingSoon"))}
+          className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 flex-shrink-0"
+        >
+          <Mic size={22} className="text-primary-600" />
+        </button>
+        <button
+          onClick={handleSend}
+          className="p-2 bg-primary-600 text-white rounded-full hover:bg-primary-700 flex-shrink-0"
+        >
+          <Send size={22} />
+        </button>
+      </div>
     </div>
   );
 }

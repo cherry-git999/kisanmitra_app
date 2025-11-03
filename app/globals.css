@@ -6,22 +6,22 @@
   * {
     box-sizing: border-box;
   }
-  
+
   html {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: "Inter", system-ui, sans-serif;
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
   }
-  
+
   body {
     margin: 0;
     padding: 0;
     min-height: 100vh;
-    background-color: #F5F1E8;
-    color: #2D5016;
+    background-color: #f5f1e8;
+    color: #2d5016;
     overflow-x: hidden;
   }
-  
+
   #root {
     min-height: 100vh;
     display: flex;
@@ -33,23 +33,23 @@
   .btn-primary {
     @apply bg-primary-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-600 transition-colors duration-200 flex items-center justify-center gap-2;
   }
-  
+
   .btn-secondary {
     @apply bg-primary-100 text-primary-500 px-6 py-3 rounded-lg font-semibold hover:bg-primary-50 transition-colors duration-200 flex items-center justify-center gap-2;
   }
-  
+
   .card {
     @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6;
   }
-  
+
   .input {
     @apply w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
   }
-  
+
   .tab-active {
     @apply text-primary-500 border-b-2 border-primary-500;
   }
-  
+
   .tab-inactive {
     @apply text-secondary-500 hover:text-primary-500 transition-colors duration-200;
   }
@@ -60,7 +60,7 @@
   .mobile-padding {
     @apply px-4;
   }
-  
+
   .mobile-text {
     @apply text-sm;
   }
@@ -71,8 +71,10 @@
   .hover\:scale-105:hover {
     transform: none;
   }
-  
-  button, .btn-primary, .btn-secondary {
+
+  button,
+  .btn-primary,
+  .btn-secondary {
     @apply active:scale-95 transition-transform duration-150;
   }
 }

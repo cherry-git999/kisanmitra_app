@@ -21,7 +21,7 @@ export default function PhotoAnalysis() {
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [openSection, setOpenSection] = useState<string | null>(null);
   const [ttsStatus, setTtsStatus] = useState<"idle" | "playing" | "paused">(
-    "idle"
+    "idle",
   );
   const utterRef = useRef<SpeechSynthesisUtterance | null>(null);
 
@@ -31,7 +31,7 @@ export default function PhotoAnalysis() {
 
   // Reset scroll position when component mounts
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'auto' });
+    window.scrollTo({ top: 0, behavior: "auto" });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
   }, []);
@@ -98,53 +98,53 @@ export default function PhotoAnalysis() {
     setAnalyzing(true);
     setTimeout(() => {
       const result = {
-        title: t('smartDiagnosisTitle'),
-        crop: t('ricePaddy'),
-        disease: t('riceBlast'),
-        commonName: t('riceBlastLeafBlast'),
-        scientificName: t('magnaportheOryzae'),
+        title: t("smartDiagnosisTitle"),
+        crop: t("ricePaddy"),
+        disease: t("riceBlast"),
+        commonName: t("riceBlastLeafBlast"),
+        scientificName: t("magnaportheOryzae"),
         symptoms: [
-          t('diamondSpindleShapedGraySpots'),
-          t('severeInfectionLeadsDrying'),
-          t('neckBlastAppearsPanicle'),
+          t("diamondSpindleShapedGraySpots"),
+          t("severeInfectionLeadsDrying"),
+          t("neckBlastAppearsPanicle"),
         ],
-        spread: t('airborneSporesRainSplash'),
+        spread: t("airborneSporesRainSplash"),
         organicSolutions: [
           {
-            name: t('neemOilSpray'),
-            content: `${t('ingredientsNeemOilSpray')}
-${t('preparationNeemOilSpray')}
-${t('preparationNeemOilSpray2')}
-${t('preparationNeemOilSpray3')}
-${t('preparationNeemOilSpray4')}
-${t('preparationNeemOilSpray5')}
-${t('applicationNeemOilSpray')}`,
+            name: t("neemOilSpray"),
+            content: `${t("ingredientsNeemOilSpray")}
+${t("preparationNeemOilSpray")}
+${t("preparationNeemOilSpray2")}
+${t("preparationNeemOilSpray3")}
+${t("preparationNeemOilSpray4")}
+${t("preparationNeemOilSpray5")}
+${t("applicationNeemOilSpray")}`,
           },
         ],
         traditionalSolutions: [
           {
-            name: t('tulsiAndBael'),
-            content: t('whenSprayedInfectedFields'),
+            name: t("tulsiAndBael"),
+            content: t("whenSprayedInfectedFields"),
           },
           {
-            name: t('cowsUrine'),
-            content: t('soakingPaddySeedsDiluted'),
+            name: t("cowsUrine"),
+            content: t("soakingPaddySeedsDiluted"),
           },
         ],
         causes: [
-          t('highHumidityFrequentRain'),
-          t('humidity90AboveWetLeaves'),
-          t('temperature25To28Optimal'),
-          t('weatherCloudySkiesFrequent'),
-          t('soilFertilityHighNitrogen'),
+          t("highHumidityFrequentRain"),
+          t("humidity90AboveWetLeaves"),
+          t("temperature25To28Optimal"),
+          t("weatherCloudySkiesFrequent"),
+          t("soilFertilityHighNitrogen"),
         ],
         preventiveMeasures: [
-          t('removeCropResiduesWeeds'),
-          t('properWaterManagement'),
-          t('ensureSpacingAirCirculation'),
-          t('timelySowingAvoidDisease'),
-          t('applyNeemTrichodermaSprays'),
-          t('regularMonitoringRemoveInfected'),
+          t("removeCropResiduesWeeds"),
+          t("properWaterManagement"),
+          t("ensureSpacingAirCirculation"),
+          t("timelySowingAvoidDisease"),
+          t("applyNeemTrichodermaSprays"),
+          t("regularMonitoringRemoveInfected"),
         ],
       };
       setAnalysisResult(result);
@@ -198,40 +198,42 @@ ${t('applicationNeemOilSpray')}`,
     }
 
     // Idle state: start fresh
-    const text = `${t('cropLabel')}: ${analysisResult.crop}. ${t('diseaseLabel')}: ${analysisResult.disease}. ${t('commonNameLabel')}: ${analysisResult.commonName}. ${t('scientificNameLabel')}: ${analysisResult.scientificName}. ${t('symptomsTitle')}: ${analysisResult.symptoms.join(". ")}. ${t('organicSolutionsTitle')}: ${analysisResult.organicSolutions.map((o: any) => o.name + ": " + o.content.substring(0, 200) + "...").join(". ")}. ${t('traditionalSolutionsTitle')}: ${analysisResult.traditionalSolutions.map((ti: any) => ti.name + ": " + ti.content).join(". ")}. ${t('causesTitle')}: ${analysisResult.causes.join(". ")}. ${t('preventiveMeasuresTitle')}: ${analysisResult.preventiveMeasures.join(". ")}.`;
+    const text = `${t("cropLabel")}: ${analysisResult.crop}. ${t("diseaseLabel")}: ${analysisResult.disease}. ${t("commonNameLabel")}: ${analysisResult.commonName}. ${t("scientificNameLabel")}: ${analysisResult.scientificName}. ${t("symptomsTitle")}: ${analysisResult.symptoms.join(". ")}. ${t("organicSolutionsTitle")}: ${analysisResult.organicSolutions.map((o: any) => o.name + ": " + o.content.substring(0, 200) + "...").join(". ")}. ${t("traditionalSolutionsTitle")}: ${analysisResult.traditionalSolutions.map((ti: any) => ti.name + ": " + ti.content).join(". ")}. ${t("causesTitle")}: ${analysisResult.causes.join(". ")}. ${t("preventiveMeasuresTitle")}: ${analysisResult.preventiveMeasures.join(". ")}.`;
 
     const utter = new SpeechSynthesisUtterance(text);
-    
+
     // Enhanced voice selection for Telugu
-    if (language === 'te') {
+    if (language === "te") {
       // Wait for voices to load if not available
       const setTeluguVoice = () => {
         const voices = synth.getVoices();
-        const teluguVoice = voices.find(voice => 
-          voice.lang === 'te-IN' || 
-          voice.lang === 'te' ||
-          voice.name.toLowerCase().includes('telugu') ||
-          voice.name.toLowerCase().includes('india')
+        const teluguVoice = voices.find(
+          (voice) =>
+            voice.lang === "te-IN" ||
+            voice.lang === "te" ||
+            voice.name.toLowerCase().includes("telugu") ||
+            voice.name.toLowerCase().includes("india"),
         );
-        
+
         if (teluguVoice) {
           utter.voice = teluguVoice;
           utter.lang = teluguVoice.lang;
         } else {
           // Fallback to Hindi or English Indian voice
-          const hindiVoice = voices.find(voice => 
-            voice.lang === 'hi-IN' || 
-            voice.name.toLowerCase().includes('hindi')
+          const hindiVoice = voices.find(
+            (voice) =>
+              voice.lang === "hi-IN" ||
+              voice.name.toLowerCase().includes("hindi"),
           );
           if (hindiVoice) {
             utter.voice = hindiVoice;
-            utter.lang = 'hi-IN';
+            utter.lang = "hi-IN";
           } else {
-            utter.lang = 'en-IN'; // Indian English as last resort
+            utter.lang = "en-IN"; // Indian English as last resort
           }
         }
       };
-      
+
       if (synth.getVoices().length === 0) {
         synth.onvoiceschanged = setTeluguVoice;
       } else {
@@ -240,13 +242,13 @@ ${t('applicationNeemOilSpray')}`,
     } else {
       utter.lang = languageToLocale(language as any);
     }
-    
+
     utter.rate = 0.8;
     utter.pitch = 1;
     utter.onstart = () => setTtsStatus("playing");
     utter.onend = () => setTtsStatus("idle");
     utter.onerror = (event) => {
-      console.log('TTS Error:', event.error, 'Language:', language);
+      console.log("TTS Error:", event.error, "Language:", language);
       setTtsStatus("idle");
     };
 
@@ -277,7 +279,7 @@ ${t('applicationNeemOilSpray')}`,
           </div>
           <div className="flex-1 flex items-center justify-center">
             <div className="bg-black bg-opacity-50 px-6 py-3 rounded-full">
-              <p className="text-white text-center">{t('alignCenter')}</p>
+              <p className="text-white text-center">{t("alignCenter")}</p>
             </div>
           </div>
           <div className="pb-8 flex justify-center">
@@ -309,9 +311,9 @@ ${t('applicationNeemOilSpray')}`,
               className="text-green-600 mx-auto mb-4 animate-pulse"
             />
             <h2 className="text-2xl font-semibold text-green-700">
-              {t('analyzingYourCrop')}
+              {t("analyzingYourCrop")}
             </h2>
-            <p className="text-gray-600">{t('pleaseWait')}</p>
+            <p className="text-gray-600">{t("pleaseWait")}</p>
           </div>
         </div>
       </div>
@@ -346,15 +348,15 @@ ${t('applicationNeemOilSpray')}`,
             >
               {ttsStatus === "playing" ? (
                 <>
-                  <Pause size={18} /> {t('pause')}
+                  <Pause size={18} /> {t("pause")}
                 </>
               ) : ttsStatus === "paused" ? (
                 <>
-                  <Play size={18} /> {t('resume')}
+                  <Play size={18} /> {t("resume")}
                 </>
               ) : (
                 <>
-                  <Volume2 size={18} /> {t('listen')}
+                  <Volume2 size={18} /> {t("listen")}
                 </>
               )}
             </button>
@@ -367,27 +369,53 @@ ${t('applicationNeemOilSpray')}`,
 
             <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 space-y-2">
               <p>
-                <strong>{t('cropLabel')}:</strong> {analysisResult.crop}
+                <strong>{t("cropLabel")}:</strong> {analysisResult.crop}
               </p>
               <p>
-                <strong>{t('diseaseLabel')}:</strong> {analysisResult.disease}
+                <strong>{t("diseaseLabel")}:</strong> {analysisResult.disease}
               </p>
               <p>
-                <strong>{t('commonNameLabel')}:</strong> {analysisResult.commonName}
+                <strong>{t("commonNameLabel")}:</strong>{" "}
+                {analysisResult.commonName}
               </p>
               <p>
-                <strong>{t('scientificNameLabel')}:</strong> {analysisResult.scientificName}
+                <strong>{t("scientificNameLabel")}:</strong>{" "}
+                {analysisResult.scientificName}
               </p>
             </div>
 
             {/* Collapsible sections */}
             {[
-              { key: "symptoms", title: t('symptomsTitle'), content: analysisResult.symptoms },
-              { key: "spread", title: t('modeOfSpreadTitle'), content: [analysisResult.spread] },
-              { key: "organicSolutions", title: t('organicSolutionsTitle'), content: analysisResult.organicSolutions },
-              { key: "traditionalSolutions", title: t('traditionalSolutionsTitle'), content: analysisResult.traditionalSolutions },
-              { key: "causes", title: t('causesTitle'), content: analysisResult.causes },
-              { key: "preventiveMeasures", title: t('preventiveMeasuresTitle'), content: analysisResult.preventiveMeasures },
+              {
+                key: "symptoms",
+                title: t("symptomsTitle"),
+                content: analysisResult.symptoms,
+              },
+              {
+                key: "spread",
+                title: t("modeOfSpreadTitle"),
+                content: [analysisResult.spread],
+              },
+              {
+                key: "organicSolutions",
+                title: t("organicSolutionsTitle"),
+                content: analysisResult.organicSolutions,
+              },
+              {
+                key: "traditionalSolutions",
+                title: t("traditionalSolutionsTitle"),
+                content: analysisResult.traditionalSolutions,
+              },
+              {
+                key: "causes",
+                title: t("causesTitle"),
+                content: analysisResult.causes,
+              },
+              {
+                key: "preventiveMeasures",
+                title: t("preventiveMeasuresTitle"),
+                content: analysisResult.preventiveMeasures,
+              },
             ].map((section) => (
               <div
                 key={section.key}
@@ -419,15 +447,15 @@ ${t('applicationNeemOilSpray')}`,
                                 __html: item.content
                                   .replace(
                                     /(Ingredients:)/g,
-                                    `<span class="font-semibold text-green-600">${t('ingredientsLabel')}:</span>`
+                                    `<span class="font-semibold text-green-600">${t("ingredientsLabel")}:</span>`,
                                   )
                                   .replace(
                                     /(Preparation:)/g,
-                                    `<span class="font-semibold text-green-600">${t('preparationLabel')}:</span>`
+                                    `<span class="font-semibold text-green-600">${t("preparationLabel")}:</span>`,
                                   )
                                   .replace(
                                     /(Application:)/g,
-                                    `<span class="font-semibold text-green-600">${t('applicationLabel')}:</span>`
+                                    `<span class="font-semibold text-green-600">${t("applicationLabel")}:</span>`,
                                   ),
                               }}
                             />
@@ -448,12 +476,10 @@ ${t('applicationNeemOilSpray')}`,
 
   // ---- DEFAULT HOME ----
   return (
-      <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50">
       <div className="bg-green-700 text-white px-6 pt-14 pb-8 text-center">
-        <h1 className="text-3xl font-bold mb-2">{t('aiPhotoCropAnalysis')}</h1>
-        <p className="text-green-100">
-          {t('captureOrUpload')}
-        </p>
+        <h1 className="text-3xl font-bold mb-2">{t("aiPhotoCropAnalysis")}</h1>
+        <p className="text-green-100">{t("captureOrUpload")}</p>
       </div>
 
       <div className="max-w-md mx-auto p-6 space-y-8">
@@ -463,12 +489,12 @@ ${t('applicationNeemOilSpray')}`,
 
         <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
           <h2 className="text-lg font-semibold text-green-700 mb-4">
-            {t('howItWorks')}
+            {t("howItWorks")}
           </h2>
           <ul className="space-y-2 text-gray-700">
-            <li>{t('step1')}</li>
-            <li>{t('step2')}</li>
-            <li>{t('step3')}</li>
+            <li>{t("step1")}</li>
+            <li>{t("step2")}</li>
+            <li>{t("step3")}</li>
           </ul>
         </div>
 
@@ -477,16 +503,16 @@ ${t('applicationNeemOilSpray')}`,
             onClick={startCamera}
             className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2"
           >
-            <Camera size={22} /> {t('openCamera')}
+            <Camera size={22} /> {t("openCamera")}
           </button>
 
-          <div className="text-center text-gray-500">{t('or')}</div>
+          <div className="text-center text-gray-500">{t("or")}</div>
 
           <button
             onClick={() => fileInputRef.current?.click()}
             className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2"
           >
-            <Upload size={22} /> {t('uploadPhoto')}
+            <Upload size={22} /> {t("uploadPhoto")}
           </button>
 
           <input

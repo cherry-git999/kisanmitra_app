@@ -1,34 +1,37 @@
-import React, { useEffect } from 'react';
-import { MapPin, Phone, Mail, Package } from 'lucide-react';
-import { useI18n } from '../i18n';
+import React, { useEffect } from "react";
+import { MapPin, Phone, Mail, Package } from "lucide-react";
+import { useI18n } from "../i18n";
 
 const mockSuppliers = [
   {
     id: 1,
-    name: 'Greenfield Organics & Naturals',
-    phone: '+91 9143336662', 
-    email: 'info@greenvalley.com',
-    address: 'Greenfield Organics & Naturals,Peda Waltair Opposite Three Town Police Station, Visakhapatnam, Andhra Pradesh 530017',
-    distance: '750 m',
-    products: ['Seeds', 'Fertilizers', 'Tools', 'Neem Oil'],
+    name: "Greenfield Organics & Naturals",
+    phone: "+91 9143336662",
+    email: "info@greenvalley.com",
+    address:
+      "Greenfield Organics & Naturals,Peda Waltair Opposite Three Town Police Station, Visakhapatnam, Andhra Pradesh 530017",
+    distance: "750 m",
+    products: ["Seeds", "Fertilizers", "Tools", "Neem Oil"],
   },
   {
     id: 3,
-    name: 'Satyasai Agri Centre',
-    phone: '+91 98765 43212',
-    email: 'sales@organicsolutions.in',
-    address: 'Satyasai Agri Centre,30-12-10, Ranga St, Daba Gardens, Allipuram, Visakhapatnam, Andhra Pradesh 530020',
-    distance: '3.4 km',
-    products: ['Fertilizers', 'Pest Control', 'Soil Testing'],
+    name: "Satyasai Agri Centre",
+    phone: "+91 98765 43212",
+    email: "sales@organicsolutions.in",
+    address:
+      "Satyasai Agri Centre,30-12-10, Ranga St, Daba Gardens, Allipuram, Visakhapatnam, Andhra Pradesh 530020",
+    distance: "3.4 km",
+    products: ["Fertilizers", "Pest Control", "Soil Testing"],
   },
   {
     id: 2,
-    name: 'Avani Organics',  
-    phone: '+91 7799770328',
-    email: 'contact@naturalfarms.com',
-    address: 'Avani Organics, Mvp Sector 7, MVP Colony, Visakhapatnam, Andhra Pradesh 530022',
-    distance: '3.6 km',
-    products: ['Compost', 'Bio-Pesticides', 'Seeds', 'Equipment'],
+    name: "Avani Organics",
+    phone: "+91 7799770328",
+    email: "contact@naturalfarms.com",
+    address:
+      "Avani Organics, Mvp Sector 7, MVP Colony, Visakhapatnam, Andhra Pradesh 530022",
+    distance: "3.6 km",
+    products: ["Compost", "Bio-Pesticides", "Seeds", "Equipment"],
   },
 ];
 
@@ -37,31 +40,36 @@ export default function Suppliers() {
 
   // Reset scroll position when component mounts
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'auto' });
+    window.scrollTo({ top: 0, behavior: "auto" });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
   }, []);
 
   const handleCall = (phone: string) => {
-    window.open(`tel:${phone}`, '_self');
+    window.open(`tel:${phone}`, "_self");
   };
 
   const handleEmail = (email: string) => {
-    window.open(`mailto:${email}`, '_self');
+    window.open(`mailto:${email}`, "_self");
   };
 
   const handleDirections = (address: string) => {
     const query = encodeURIComponent(address);
-    window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
+    window.open(
+      `https://www.google.com/maps/search/?api=1&query=${query}`,
+      "_blank",
+    );
   };
 
   return (
     <div className="min-h-screen bg-primary-50">
       {/* Header */}
       <div className="bg-primary-500 text-white px-4 pt-12 pb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-2">{t('localSuppliers')}</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold mb-2">
+          {t("localSuppliers")}
+        </h1>
         <p className="text-primary-100 text-sm sm:text-base">
-          {t('findSuppliersSub')}
+          {t("findSuppliersSub")}
         </p>
       </div>
 
@@ -69,9 +77,7 @@ export default function Suppliers() {
         {/* Info Banner */}
         <div className="bg-primary-100 text-primary-500 p-4 rounded-lg flex items-center gap-3">
           <Package size={24} />
-          <p className="font-medium">
-            {t('certifiedSuppliers')}
-          </p>
+          <p className="font-medium">{t("certifiedSuppliers")}</p>
         </div>
 
         {/* Suppliers List */}
@@ -91,20 +97,25 @@ export default function Suppliers() {
 
               {/* Address */}
               <div className="flex items-start gap-2 mb-4">
-                <MapPin size={18} className="text-gray-500 mt-0.5 flex-shrink-0" />
+                <MapPin
+                  size={18}
+                  className="text-gray-500 mt-0.5 flex-shrink-0"
+                />
                 <p className="text-gray-600 text-sm">{supplier.address}</p>
               </div>
 
               {/* Products */}
               <div className="mb-4">
-                <p className="text-sm font-semibold text-primary-500 mb-2">{t('products')}</p>
+                <p className="text-sm font-semibold text-primary-500 mb-2">
+                  {t("products")}
+                </p>
                 <div className="flex flex-wrap gap-2">
                   {supplier.products.map((product, index) => (
                     <span
                       key={index}
                       className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm"
                     >
-                      {t(`product${product.replace(/\s+/g, '')}`)}
+                      {t(`product${product.replace(/\s+/g, "")}`)}
                     </span>
                   ))}
                 </div>
@@ -117,21 +128,21 @@ export default function Suppliers() {
                   className="btn-primary text-sm py-2"
                 >
                   <Phone size={16} />
-                  {t('call')}
+                  {t("call")}
                 </button>
                 <button
                   onClick={() => handleEmail(supplier.email)}
                   className="btn-secondary text-sm py-2"
                 >
                   <Mail size={16} />
-                  {t('email')}
+                  {t("email")}
                 </button>
                 <button
                   onClick={() => handleDirections(supplier.address)}
                   className="btn-secondary text-sm py-2"
                 >
                   <MapPin size={16} />
-                  {t('directions')}
+                  {t("directions")}
                 </button>
               </div>
             </div>
@@ -140,10 +151,10 @@ export default function Suppliers() {
 
         {/* Bottom Info */}
         <div className="card text-center">
-          <h3 className="font-bold text-primary-500 mb-2">{t('missingSupplier')}</h3>
-          <p className="text-gray-600 text-sm">
-            {t('contactUsAdd')}
-          </p>
+          <h3 className="font-bold text-primary-500 mb-2">
+            {t("missingSupplier")}
+          </h3>
+          <p className="text-gray-600 text-sm">{t("contactUsAdd")}</p>
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@ export default function SplashScreen() {
         {/* Logo Section */}
         <div className="mb-8 animate-bounce">
           <img
-            src="/ll.jpg" 
+            src="/ll.jpg"
             alt="Farm AI Logo"
             className="mx-auto w-32 h-32 object-cover rounded-full shadow-lg"
           />

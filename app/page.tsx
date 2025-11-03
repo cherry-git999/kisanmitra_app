@@ -33,15 +33,45 @@ import { useI18n } from "./i18n";
 function useLocalizedTabs(t: (k: string) => string) {
   return useMemo(
     () => [
-      { id: "chatbot", label: t("aiChat"), icon: MessageSquare, component: ChartBot },
-      { id: "photo", label: t("scanner"), icon: ScanLine, component: PhotoAnalysis },
+      {
+        id: "chatbot",
+        label: t("aiChat"),
+        icon: MessageSquare,
+        component: ChartBot,
+      },
+      {
+        id: "photo",
+        label: t("scanner"),
+        icon: ScanLine,
+        component: PhotoAnalysis,
+      },
       { id: "guides", label: t("guides"), icon: BookOpen, component: Guides },
-      { id: "community", label: t("community"), icon: Users, component: Community },
-      { id: "calendar", label: t("calendar"), icon: Calendar, component: CalendarView },
-      { id: "suppliers", label: t("suppliers"), icon: MapPin, component: Suppliers },
-      { id: "tracking", label: t("myLogs"), icon: ClipboardList, component: Tracking },
+      {
+        id: "community",
+        label: t("community"),
+        icon: Users,
+        component: Community,
+      },
+      {
+        id: "calendar",
+        label: t("calendar"),
+        icon: Calendar,
+        component: CalendarView,
+      },
+      {
+        id: "suppliers",
+        label: t("suppliers"),
+        icon: MapPin,
+        component: Suppliers,
+      },
+      {
+        id: "tracking",
+        label: t("myLogs"),
+        icon: ClipboardList,
+        component: Tracking,
+      },
     ],
-    [t]
+    [t],
   );
 }
 
@@ -244,7 +274,11 @@ export default function Page() {
             {!loggedIn ? (
               <div>
                 <h2 className="text-xl font-semibold mb-4 text-center">
-                  {isSignup ? t("signUp") : otpSent ? t("enterOtp") : t("login")}
+                  {isSignup
+                    ? t("signUp")
+                    : otpSent
+                      ? t("enterOtp")
+                      : t("login")}
                 </h2>
                 <div className="space-y-3">
                   {!otpSent && (
@@ -265,7 +299,10 @@ export default function Page() {
                             placeholder={t("cropsPlaceholder")}
                             value={tempData.crops}
                             onChange={(e) =>
-                              setTempData({ ...tempData, crops: e.target.value })
+                              setTempData({
+                                ...tempData,
+                                crops: e.target.value,
+                              })
                             }
                             className="w-full border p-2 rounded"
                           />
@@ -278,7 +315,9 @@ export default function Page() {
                           >
                             <option value="">{t("selectFarmingType")}</option>
                             <option value="Organic">{t("organic")}</option>
-                            <option value="Conventional">{t("conventional")}</option>
+                            <option value="Conventional">
+                              {t("conventional")}
+                            </option>
                             <option value="Mixed">{t("mixed")}</option>
                           </select>
                         </>
@@ -344,10 +383,18 @@ export default function Page() {
                 <h2 className="text-xl font-semibold text-center mb-4">
                   {t("profileTitle")}
                 </h2>
-                <p><strong>{t("nameField")}:</strong> {user.name}</p>
-                <p><strong>{t("phoneField")}:</strong> {user.phone}</p>
-                <p><strong>{t("cropsField")}:</strong> {user.crops}</p>
-                <p><strong>{t("farmingTypeField")}:</strong> {user.type}</p>
+                <p>
+                  <strong>{t("nameField")}:</strong> {user.name}
+                </p>
+                <p>
+                  <strong>{t("phoneField")}:</strong> {user.phone}
+                </p>
+                <p>
+                  <strong>{t("cropsField")}:</strong> {user.crops}
+                </p>
+                <p>
+                  <strong>{t("farmingTypeField")}:</strong> {user.type}
+                </p>
 
                 <button
                   onClick={handleLogout}
