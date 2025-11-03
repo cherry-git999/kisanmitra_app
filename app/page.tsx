@@ -1,65 +1,418 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React, { useState, useEffect, useMemo } from "react";
+import {
+  BookOpen,
+  Users,
+  Calendar,
+  MapPin,
+  ClipboardList,
+  Menu,
+  X,
+  Home,
+  User,
+  Settings,
+  LogOut,
+  MessageSquare,
+  ScanLine,
+} from "lucide-react";
+
+import PhotoAnalysis from "./components/PhotoAnalysis";
+import Guides from "./components/Guides";
+import Community from "./components/Community";
+import CalendarView from "./components/CalendarView";
+import Suppliers from "./components/Suppliers";
+import Tracking from "./components/Tracking";
+import SplashScreen from "./components/SplashScreen";
+import LanguageSelection from "./components/LanguageSelection";
+import Dashboard from "./components/Dashboard";
+import ChartBot from "./components/ChartBot";
+
+import { useI18n } from "./i18n";
+
+function useLocalizedTabs(t: (k: string) => string) {
+  return useMemo(
+    () => [
+      { id: "chatbot", label: t("aiChat"), icon: MessageSquare, component: ChartBot },
+      { id: "photo", label: t("scanner"), icon: ScanLine, component: PhotoAnalysis },
+      { id: "guides", label: t("guides"), icon: BookOpen, component: Guides },
+      { id: "community", label: t("community"), icon: Users, component: Community },
+      { id: "calendar", label: t("calendar"), icon: Calendar, component: CalendarView },
+      { id: "suppliers", label: t("suppliers"), icon: MapPin, component: Suppliers },
+      { id: "tracking", label: t("myLogs"), icon: ClipboardList, component: Tracking },
+    ],
+    [t]
+  );
+}
+
+const bottomNavTabs = ["chatbot", "photo", "suppliers", "community"];
+
+export default function Page() {
+  const { t, setLanguage, language } = useI18n();
+  const [showSplash, setShowSplash] = useState(true);
+  const [showLanguageSelection, setShowLanguageSelection] = useState(false);
+  const [showDashboard, setShowDashboard] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState("");
+  const [activeTab, setActiveTab] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [isSignup, setIsSignup] = useState(false);
+
+  const [user, setUser] = useState({
+    name: "",
+    phone: "",
+    crops: "",
+    type: "",
+  });
+
+  const [tempData, setTempData] = useState({
+    phone: "",
+    otp: "",
+    name: "",
+    crops: "",
+    type: "",
+  });
+
+  const languageOptions = [
+    { value: "en", label: "English" },
+    { value: "te", label: "Telugu" },
+    { value: "hi", label: "Hindi" },
+  ];
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSplash(false);
+      setShowLanguageSelection(true);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const tabs = useLocalizedTabs(t);
+
+  const handleLanguageSelect = (langCode: string) => {
+    const code = (langCode as "en" | "hi" | "te") || "en";
+    setSelectedLanguage(code);
+    setLanguage(code);
+    setShowLanguageSelection(false);
+    setShowDashboard(true);
+  };
+
+  const handleFeatureSelect = (featureId: string) => {
+    setActiveTab(featureId);
+    setShowDashboard(false);
+    window.scrollTo({ top: 0 });
+  };
+
+  const handleBackToDashboard = () => {
+    setActiveTab("");
+    setShowDashboard(true);
+    window.scrollTo({ top: 0 });
+  };
+
+  const handleLoginSubmit = () => {
+    if (!otpSent) {
+      setOtpSent(true);
+    } else {
+      setLoggedIn(true);
+      setUser({
+        name: tempData.name || "Ram Babu",
+        phone: tempData.phone,
+        crops: tempData.crops || "Paddy",
+        type: tempData.type || "Organic",
+      });
+      setProfileOpen(false);
+      setOtpSent(false);
+    }
+  };
+
+  const handleLogout = () => {
+    setLoggedIn(false);
+    setUser({ name: "", phone: "", crops: "", type: "" });
+    setTempData({ phone: "", otp: "", name: "", crops: "", type: "" });
+    setProfileOpen(false);
+  };
+
+  const ActiveComponent =
+    tabs.find((tab) => tab.id === activeTab)?.component || PhotoAnalysis;
+
+  if (showSplash) return <SplashScreen />;
+  if (showLanguageSelection)
+    return <LanguageSelection onLanguageSelect={handleLanguageSelect} />;
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="min-h-screen bg-primary-50 flex flex-col">
+      {/* Top Navbar */}
+      <header className="bg-primary-600 text-white flex items-center justify-between px-4 py-3 shadow-md relative">
+        <button onClick={() => setMenuOpen(!menuOpen)}>
+          <Menu size={26} />
+        </button>
+
+        <h1 className="text-lg font-bold absolute left-1/2 -translate-x-1/2">
+          {t("appTitle")}
+        </h1>
+
+        <button onClick={() => setProfileOpen(true)}>
+          <User size={26} />
+        </button>
+      </header>
+
+      {/* Sidebar */}
+      {menuOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40"
+          onClick={() => setMenuOpen(false)}
+        >
+          <div
+            className="absolute top-0 left-0 w-64 h-full bg-white shadow-xl p-4 z-50"
+            onClick={(e) => e.stopPropagation()}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <button onClick={() => setMenuOpen(false)} className="ml-auto mb-6">
+              <X size={26} />
+            </button>
+
+            <h2 className="text-xl font-semibold mb-4">{t("quickLinks")}</h2>
+            <ul className="space-y-3">
+              <li>
+                <button
+                  onClick={() => {
+                    handleBackToDashboard();
+                    setMenuOpen(false);
+                  }}
+                  className="flex items-center gap-2 hover:bg-gray-100 p-2 rounded"
+                >
+                  <Home size={20} /> <span>{t("home")}</span>
+                </button>
+              </li>
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                return (
+                  <li key={tab.id}>
+                    <button
+                      onClick={() => {
+                        setActiveTab(tab.id);
+                        setMenuOpen(false);
+                        window.scrollTo({ top: 0 });
+                      }}
+                      className="flex items-center gap-2 hover:bg-gray-100 p-2 rounded"
+                    >
+                      <Icon size={20} /> <span>{tab.label}</span>
+                    </button>
+                  </li>
+                );
+              })}
+
+              <li className="mt-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <Settings size={16} /> <span>{t("language")}</span>
+                </div>
+                <select
+                  value={selectedLanguage || language}
+                  onChange={(e) => handleLanguageSelect(e.target.value)}
+                  className="w-full border p-2 rounded"
+                >
+                  {languageOptions.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              </li>
+            </ul>
+          </div>
         </div>
-      </main>
+      )}
+
+      {/* Profile Modal */}
+      {profileOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center"
+          onClick={() => setProfileOpen(false)}
+        >
+          <div
+            className="bg-white rounded-xl p-6 w-80 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setProfileOpen(false)}
+              className="absolute top-3 right-3"
+            >
+              <X size={22} />
+            </button>
+
+            {!loggedIn ? (
+              <div>
+                <h2 className="text-xl font-semibold mb-4 text-center">
+                  {isSignup ? t("signUp") : otpSent ? t("enterOtp") : t("login")}
+                </h2>
+                <div className="space-y-3">
+                  {!otpSent && (
+                    <>
+                      {isSignup && (
+                        <>
+                          <input
+                            type="text"
+                            placeholder={t("nameLabel")}
+                            value={tempData.name}
+                            onChange={(e) =>
+                              setTempData({ ...tempData, name: e.target.value })
+                            }
+                            className="w-full border p-2 rounded"
+                          />
+                          <input
+                            type="text"
+                            placeholder={t("cropsPlaceholder")}
+                            value={tempData.crops}
+                            onChange={(e) =>
+                              setTempData({ ...tempData, crops: e.target.value })
+                            }
+                            className="w-full border p-2 rounded"
+                          />
+                          <select
+                            value={tempData.type}
+                            onChange={(e) =>
+                              setTempData({ ...tempData, type: e.target.value })
+                            }
+                            className="w-full border p-2 rounded"
+                          >
+                            <option value="">{t("selectFarmingType")}</option>
+                            <option value="Organic">{t("organic")}</option>
+                            <option value="Conventional">{t("conventional")}</option>
+                            <option value="Mixed">{t("mixed")}</option>
+                          </select>
+                        </>
+                      )}
+                      <input
+                        type="tel"
+                        placeholder={t("phonePlaceholder")}
+                        value={tempData.phone}
+                        onChange={(e) =>
+                          setTempData({ ...tempData, phone: e.target.value })
+                        }
+                        className="w-full border p-2 rounded"
+                      />
+                    </>
+                  )}
+
+                  {otpSent && (
+                    <input
+                      type="text"
+                      placeholder={t("enterOtp")}
+                      value={tempData.otp}
+                      onChange={(e) =>
+                        setTempData({ ...tempData, otp: e.target.value })
+                      }
+                      className="w-full border p-2 rounded"
+                    />
+                  )}
+
+                  <button
+                    onClick={handleLoginSubmit}
+                    className="w-full bg-primary-600 text-white py-2 rounded"
+                  >
+                    {otpSent ? t("verifyOtp") : t("continueBtn")}
+                  </button>
+
+                  <p className="text-center text-sm mt-3">
+                    {isSignup ? (
+                      <>
+                        {t("alreadyHaveAccount")}{" "}
+                        <button
+                          className="text-primary-600"
+                          onClick={() => setIsSignup(false)}
+                        >
+                          {t("login")}
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        {t("newHere")}{" "}
+                        <button
+                          className="text-primary-600"
+                          onClick={() => setIsSignup(true)}
+                        >
+                          {t("signUp")}
+                        </button>
+                      </>
+                    )}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <h2 className="text-xl font-semibold text-center mb-4">
+                  {t("profileTitle")}
+                </h2>
+                <p><strong>{t("nameField")}:</strong> {user.name}</p>
+                <p><strong>{t("phoneField")}:</strong> {user.phone}</p>
+                <p><strong>{t("cropsField")}:</strong> {user.crops}</p>
+                <p><strong>{t("farmingTypeField")}:</strong> {user.type}</p>
+
+                <button
+                  onClick={handleLogout}
+                  className="w-full bg-red-500 text-white py-2 rounded mt-4 flex items-center justify-center gap-2"
+                >
+                  <LogOut size={18} />
+                  <span>{t("logout")}</span>
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Main Content */}
+      <div className="flex-1 pb-20">
+        {showDashboard && activeTab === "" ? (
+          <Dashboard
+            onFeatureSelect={handleFeatureSelect}
+            selectedLanguage={selectedLanguage}
+            isActive={activeTab === "" || activeTab === "dashboard"}
+          />
+        ) : (
+          <ActiveComponent />
+        )}
+      </div>
+
+      {/* Bottom Navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t px-2 py-2 z-30">
+        <div className="flex justify-around items-center">
+          <button
+            onClick={handleBackToDashboard}
+            className="flex flex-col items-center p-2"
+          >
+            <Home size={20} />
+            <span className="text-xs font-semibold">Home</span>
+          </button>
+
+          {tabs
+            .filter((tab) => bottomNavTabs.includes(tab.id))
+            .map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => {
+                    setActiveTab(tab.id);
+                    window.scrollTo({ top: 0 });
+                  }}
+                  className={`flex flex-col items-center p-2 ${
+                    isActive
+                      ? "text-primary-600 bg-primary-50"
+                      : "text-secondary-500"
+                  }`}
+                >
+                  <Icon size={20} strokeWidth={2.5} />
+                  <span className="text-xs font-semibold mt-1">
+                    {tab.label}
+                  </span>
+                </button>
+              );
+            })}
+        </div>
+      </nav>
     </div>
   );
 }
