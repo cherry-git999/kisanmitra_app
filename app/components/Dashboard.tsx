@@ -81,14 +81,14 @@ export default function Dashboard({
       description: t("trackBest"),
       color: "bg-gradient-to-br from-indigo-500 to-indigo-600",
     },
-    {
-      id: "community",
-      icon: Users,
-      title: t("communityHeader"),
-      subtitle: t("communitySub"),
-      description: t("communitySub"),
-      color: "bg-gradient-to-br from-purple-500 to-purple-600",
-    },
+    // {
+    //   id: "community",
+    //   icon: Users,
+    //   title: t("communityHeader"),
+    //   subtitle: t("communitySub"),
+    //   description: t("communitySub"),
+    //   color: "bg-gradient-to-br from-purple-500 to-purple-600",
+    // },
     {
       id: "suppliers",
       icon: MapPin,
@@ -201,7 +201,7 @@ export default function Dashboard({
   return (
     <div ref={containerRef} className="min-h-screen bg-primary-50">
       {/* Header */}
-      <div className="bg-gradient-to-br from-primary-500 to-primary-700 text-white px-4 pt-12 pb-6">
+      <div className="bg-gradient-to-br from-crop-600 to-primary-700 text-white px-4 pt-12 pb-6">
         <div className="max-w-2xl mx-auto">
           <h1 className="text-2xl sm:text-3xl font-bold mb-2">
             {getGreeting(selectedLanguage)}
@@ -212,7 +212,7 @@ export default function Dashboard({
 
           {/* 📍 Location + Time */}
           {weather && (
-            <div className="bg-white bg-opacity-20 rounded-lg p-4 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between shadow-md">
+            <div className="bg-white bg-opacity-15 rounded-lg p-4 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between shadow-md backdrop-blur-sm">
               <div className="mb-3 sm:mb-0">
                 <p className="text-lg font-semibold">
                   📍 {weather.area ? `${weather.area}, ` : ""}
@@ -236,7 +236,7 @@ export default function Dashboard({
 
           {/* Quick Stats */}
           <div className="grid grid-cols-3 gap-4">
-            <div className="bg-white bg-opacity-20 rounded-lg p-3 text-center">
+            <div className="bg-white bg-opacity-15 rounded-lg p-3 text-center backdrop-blur-sm">
               {weather ? (
                 <>
                   <div className="text-xl font-bold">
@@ -252,11 +252,11 @@ export default function Dashboard({
                 <div className="text-xs text-primary-100">Loading...</div>
               )}
             </div>
-            <div className="bg-white bg-opacity-20 rounded-lg p-3 text-center">
+            <div className="bg-white bg-opacity-15 rounded-lg p-3 text-center backdrop-blur-sm">
               <div className="text-xl font-bold">{t("good")}</div>
               <div className="text-xs text-primary-100">{t("soilHealth")}</div>
             </div>
-            <div className="bg-white bg-opacity-20 rounded-lg p-3 text-center">
+            <div className="bg-white bg-opacity-15 rounded-lg p-3 text-center backdrop-blur-sm">
               <div className="text-xl font-bold">3</div>
               <div className="text-xs text-primary-100">
                 {t("activeAlertsStat")}
@@ -268,30 +268,27 @@ export default function Dashboard({
 
       {/* Main Content */}
       <div className="max-w-2xl mx-auto p-4">
-        {/* Featured */}
+        {/* Featured - AI Chat Bot */}
         <div className="mb-6">
-          <h2 className="text-lg font-bold text-primary-500 mb-3 flex items-center gap-2">
-            <Sparkles size={20} className="text-yellow-500" /> {t("featured")}
-          </h2>
           <button
-            onClick={() => onFeatureSelect("photo")}
+            onClick={() => onFeatureSelect("chatbot")}
             className="w-full relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95"
           >
-            <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 text-white">
+            <div className="bg-gradient-to-br from-harvest-400 to-harvest-600 p-6 text-white">
               <div className="flex items-center justify-between mb-4">
                 <div className="w-16 h-16 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center">
-                  <ScanLine size={32} className="text-white" />
+                  <MessageCircle size={32} className="text-white" />
                 </div>
                 <div className="bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-xs font-bold">
                   {t("aiPowered")}
                 </div>
               </div>
               <h3 className="text-2xl font-bold mb-2">
-                {t("aiPhotoAnalysis")}
+                {t("getInstantAnswers")}
               </h3>
-              <p className="text-green-100 mb-4">{t("aiPhotoSub")}</p>
-              <div className="flex items-center gap-2 text-green-100">
-                <span className="font-semibold">{t("tryItNow")}</span>
+              <p className="text-pink-100 mb-4">{t("askAnything")}</p>
+              <div className="flex items-center gap-2 text-pink-100">
+                <span className="font-semibold">{t("startChatting")}</span>
                 <ArrowRight size={20} />
               </div>
             </div>
@@ -301,43 +298,125 @@ export default function Dashboard({
           </button>
         </div>
 
+        {/* Featured - AI Photo Analysis */}
+        <div className="mb-6">
+          <button
+            onClick={() => onFeatureSelect("photo")}
+            className="w-full sm:w-2/3 relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 active:scale-95"
+          >
+            <div className="bg-gradient-to-br from-crop-500 to-crop-700 p-4 text-white flex items-center justify-between">
+              <div className="flex-1">
+                <h3 className="text-lg font-bold mb-1">
+                  {t("scanCropPest")}
+                </h3>
+                <p className="text-crop-100 text-sm mb-2">{t("detectPestSub")}</p>
+                <div className="flex items-center gap-1 text-crop-100 text-sm">
+                  <span className="font-semibold">{t("tryItNow")}</span>
+                  <ArrowRight size={16} />
+                </div>
+              </div>
+              <div className="w-20 h-20 bg-white bg-opacity-20 rounded-xl flex items-center justify-center flex-shrink-0 ml-4">
+                <ScanLine size={40} className="text-white" />
+              </div>
+            </div>
+          </button>
+        </div>
+
         {/* All Features */}
         <div>
-          <h2 className="text-lg font-bold text-primary-500 mb-4">
-            {t("allFeatures")}
+          <h2 className="text-lg font-bold text-crop-600 mb-4">
+            {t("What Else ?")}
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-            {features.map((feature) => {
-              const Icon = feature.icon;
-              return (
-                <button
-                  key={feature.id}
-                  onClick={() => onFeatureSelect(feature.id)}
-                  className="flex flex-col items-start bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 hover:scale-105 active:scale-95 p-4 text-left"
-                >
-                  <div
-                    className={`w-12 h-12 ${feature.color} rounded-xl flex items-center justify-center mb-3`}
+            {features
+              .filter((feature) => feature.id !== "chatbot")
+              .map((feature) => {
+                const Icon = feature.icon;
+                return (
+                  <button
+                    key={feature.id}
+                    onClick={() => onFeatureSelect(feature.id)}
+                    className="flex flex-col items-start bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 hover:scale-105 active:scale-95 p-4 text-left border-l-4 border-crop-500"
                   >
-                    <Icon size={24} className="text-white" />
-                  </div>
-                  <h3 className="font-semibold text-primary-600 text-sm mb-1">
-                    {feature.title}
-                  </h3>
-                  <p className="text-xs text-gray-500 leading-tight">
-                    {feature.subtitle}
-                  </p>
-                </button>
-              );
-            })}
+                    <div
+                      className={`w-12 h-12 ${feature.color} rounded-xl flex items-center justify-center mb-3`}
+                    >
+                      <Icon size={24} className="text-white" />
+                    </div>
+                    <h3 className="font-semibold text-crop-700 text-sm mb-1">
+                      {feature.title}
+                    </h3>
+                    <p className="text-xs text-gray-600 leading-tight">
+                      {feature.subtitle}
+                    </p>
+                  </button>
+                );
+              })}
+          </div>
+        </div>
+
+        {/* Connect with Advisors */}
+        <div className="mt-8 mb-6 bg-gradient-to-br from-soil-100 to-soil-200 border-2 border-soil-400 rounded-xl p-6">
+          <h2 className="text-lg font-bold text-soil-800 mb-4">
+            {t("connectWithAdvisors")}
+          </h2>
+          <div className="space-y-3">
+            <a
+              href="https://chat.whatsapp.com/your-kisan-sangam-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full bg-white border-2 border-crop-500 rounded-lg p-4 flex items-center justify-between hover:shadow-lg transition-all duration-200 active:scale-95"
+            >
+              <div className="flex-1">
+                <h3 className="font-bold text-crop-700 text-base">{t("kisanSangam")}</h3>
+                <p className="text-xs text-crop-600 mt-1">{t("kisanSangamDesc")}</p>
+              </div>
+              <div className="flex items-center gap-2 ml-4">
+                <span className="text-sm font-semibold text-crop-700 bg-crop-100 px-2 py-1 rounded">+55</span>
+                <ArrowRight size={20} className="text-crop-600" />
+              </div>
+            </a>
+
+            <a
+              href="https://chat.whatsapp.com/your-soil-recommenders-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full bg-white border-2 border-soil-400 rounded-lg p-4 flex items-center justify-between hover:shadow-lg transition-all duration-200 active:scale-95"
+            >
+              <div className="flex-1">
+                <h3 className="font-bold text-soil-800 text-base">{t("soilRecommenders")}</h3>
+                <p className="text-xs text-soil-700 mt-1">{t("soilRecommendersDesc")}</p>
+              </div>
+              <div className="flex items-center gap-2 ml-4">
+                <span className="text-sm font-semibold text-soil-800 bg-soil-100 px-2 py-1 rounded">+42</span>
+                <ArrowRight size={20} className="text-soil-700" />
+              </div>
+            </a>
+
+            <a
+              href="https://chat.whatsapp.com/your-soil-documentation-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full bg-white border-2 border-harvest-500 rounded-lg p-4 flex items-center justify-between hover:shadow-lg transition-all duration-200 active:scale-95"
+            >
+              <div className="flex-1">
+                <h3 className="font-bold text-harvest-800 text-base">{t("soilDocumentation")}</h3>
+                <p className="text-xs text-harvest-700 mt-1">{t("soilDocumentationDesc")}</p>
+              </div>
+              <div className="flex items-center gap-2 ml-4">
+                <span className="text-sm font-semibold text-harvest-800 bg-harvest-100 px-2 py-1 rounded">+38</span>
+                <ArrowRight size={20} className="text-harvest-700" />
+              </div>
+            </a>
           </div>
         </div>
 
         {/* Tips */}
-        <div className="mt-8 card bg-gradient-to-r from-primary-100 to-secondary-100 border-2 border-primary-500">
-          <h3 className="font-bold text-primary-500 mb-2 flex items-center gap-2">
+        <div className="mt-8 card bg-gradient-to-r from-crop-100 to-harvest-100 border-2 border-crop-500">
+          <h3 className="font-bold text-crop-700 mb-2 flex items-center gap-2">
             <Sparkles size={20} /> {t("dailyTip")}
           </h3>
-          <p className="text-primary-700 text-sm">{t("dailyTipText")}</p>
+          <p className="text-crop-800 text-sm">{t("dailyTipText")}</p>
         </div>
       </div>
     </div>
