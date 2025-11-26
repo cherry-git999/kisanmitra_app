@@ -12,34 +12,69 @@ import {
 const mockEvents = [
   {
     id: 1,
+    date: "2025-10-03",
+    titleKey: "prepareFieldsForPlanting",
+    type: "planting",
+    cropKey: "paddy",
+  },
+  {
+    id: 2,
     date: "2025-10-06",
     titleKey: "rainPredictedDelay",
     type: "",
     cropKey: "paddy",
   },
   {
-    id: 2,
+    id: 3,
+    date: "2025-10-08",
+    titleKey: "applyCropNutrients",
+    type: "",
+    cropKey: "paddy",
+  },
+  {
+    id: 4,
     date: "2025-10-12",
     titleKey: "applyNeemSeedExtract",
     type: "",
     cropKey: "paddy",
   },
   {
-    id: 3,
+    id: 5,
+    date: "2025-10-15",
+    titleKey: "checkPestInfestation",
+    type: "",
+    cropKey: "paddy",
+  },
+  {
+    id: 6,
     date: "2025-10-20",
     titleKey: "humidityAbove80SheathBlightRisk",
     type: "",
     cropKey: "paddy",
   },
   {
-    id: 4,
+    id: 7,
+    date: "2025-10-23",
+    titleKey: "applyOrganicFertilizer",
+    type: "",
+    cropKey: "paddy",
+  },
+  {
+    id: 8,
     date: "2025-10-26",
     titleKey: "repeatJeevamruthamDrench",
     type: "",
     cropKey: "paddy",
   },
   {
-    id: 5,
+    id: 9,
+    date: "2025-10-29",
+    titleKey: "prepareForHarvest",
+    type: "harvesting",
+    cropKey: "paddy",
+  },
+  {
+    id: 10,
     date: "2025-10-30",
     titleKey: "afterHarvestApplyTrichoderma",
     type: "",
@@ -75,6 +110,7 @@ export default function CalendarView() {
   const { t } = useI18n();
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
   const [showPopup, setShowPopup] = useState(true);
+  const [showAlerts, setShowAlerts] = useState(false);
   const [crop, setCrop] = useState("");
 
   // Reset scroll position when component mounts
@@ -87,11 +123,11 @@ export default function CalendarView() {
   const getEventIcon = (type: string) => {
     switch (type) {
       case "planting":
-        return <Sprout size={20} className="text-primary-500" />;
+        return <Sprout size={20} className="text-primary-600" />;
       case "harvesting":
-        return <Scissors size={20} className="text-primary-500" />;
+        return <Scissors size={20} className="text-orange-600" />;
       default:
-        return <CalendarIcon size={20} className="text-primary-500" />;
+        return <CalendarIcon size={20} className="text-primary-600" />;
     }
   };
 
@@ -100,23 +136,23 @@ export default function CalendarView() {
       case "high":
         return {
           bg: "bg-red-50",
-          border: "border-red-200",
-          text: "text-red-700",
+          border: "border-red-300",
+          text: "text-red-800",
           badge: "bg-red-500",
         };
       case "medium":
         return {
           bg: "bg-yellow-50",
-          border: "border-yellow-200",
-          text: "text-yellow-700",
+          border: "border-yellow-300",
+          text: "text-yellow-800",
           badge: "bg-yellow-500",
         };
       default:
         return {
-          bg: "bg-green-50",
-          border: "border-green-200",
-          text: "text-green-700",
-          badge: "bg-green-500",
+          bg: "bg-primary-50",
+          border: "border-primary-300",
+          text: "text-primary-800",
+          badge: "bg-primary-500",
         };
     }
   };
@@ -209,15 +245,15 @@ export default function CalendarView() {
       </div>
 
       {/* Main content */}
-      <div className="max-w-2xl mx-auto p-4 space-y-6">
+      <div className="max-w-2xl mx-auto p-4 space-y-4">
         {/* Calendar */}
         <div className="card">
-          <h2 className="text-xl font-bold text-primary-500 text-center mb-6">
+          <h2 className="text-lg font-bold text-primary-500 text-center mb-4">
             {t("october2025")}
           </h2>
 
           {/* Week Days */}
-          <div className="grid grid-cols-7 gap-1 mb-4">
+          <div className="grid grid-cols-7 gap-2 mb-3">
             {[
               t("sun"),
               t("mon"),
@@ -229,7 +265,7 @@ export default function CalendarView() {
             ].map((day) => (
               <div
                 key={day}
-                className="text-center text-sm font-semibold text-secondary-500 py-2"
+                className="text-center text-xs font-semibold text-secondary-500 py-1"
               >
                 {day}
               </div>
@@ -237,17 +273,17 @@ export default function CalendarView() {
           </div>
 
           {/* Calendar Days */}
-          <div className="grid grid-cols-7 gap-1">
+          <div className="grid grid-cols-7 gap-2">
             {calendarDays.map((item, idx) => (
               <button
                 key={idx}
                 disabled={!item.day}
                 onClick={() => item.day && setSelectedDate(item.day)}
-                className={`aspect-square flex flex-col items-center justify-center p-1 rounded-lg text-sm font-medium transition-colors ${
+                className={`aspect-square flex flex-col items-center justify-center rounded-lg text-sm font-medium transition-all relative ${
                   item.day
                     ? selectedDate === item.day
-                      ? "bg-primary-500 text-white"
-                      : "hover:bg-primary-50 text-primary-500"
+                      ? "bg-primary-600 text-white font-bold"
+                      : "bg-primary-100 text-primary-700 hover:bg-primary-200"
                     : "opacity-0 cursor-default"
                 }`}
               >
@@ -259,7 +295,7 @@ export default function CalendarView() {
                         className={`w-1.5 h-1.5 rounded-full mt-1 ${
                           selectedDate === item.day
                             ? "bg-white"
-                            : "bg-primary-500"
+                            : "bg-red-500"
                         }`}
                       />
                     )}
@@ -270,78 +306,105 @@ export default function CalendarView() {
           </div>
         </div>
 
-        {/* Events */}
-        <div>
-          <h2 className="text-lg font-bold text-primary-500 mb-4">
-            {t("eventsForDay")} {selectedDate}
-          </h2>
-          {todaysEvents.length > 0 ? (
-            <div className="space-y-3">
+        {/* Event for Selected Date - Dropdown */}
+        {selectedDate && todaysEvents.length > 0 && (
+          <div className="card border-2 border-orange-300 bg-orange-50">
+            <button
+              onClick={() =>
+                setSelectedDate(null)
+              }
+              className="w-full flex items-center justify-between"
+            >
+              <div className="flex items-center gap-3 flex-1">
+                <span className="text-lg">📅</span>
+                <div className="text-left">
+                  <h3 className="font-bold text-orange-700">
+                    {t("eventFor5th")} {selectedDate}
+                  </h3>
+                  <p className="text-xs text-orange-600">
+                    {todaysEvents.length} {t("eventsScheduled")}
+                  </p>
+                </div>
+              </div>
+              <ChevronRight
+                size={20}
+                className="text-orange-600 rotate-90"
+              />
+            </button>
+            
+            {/* Event Details - Expandable */}
+            <div className="mt-4 pt-4 border-t-2 border-orange-300 space-y-3">
               {todaysEvents.map((event) => (
                 <div
                   key={event.id}
-                  className="card hover:shadow-md transition-shadow"
+                  className="bg-white rounded-lg p-3 border border-orange-200"
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
-                      {getEventIcon(event.type)}
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-primary-500">
-                        {t(event.titleKey)}
-                      </h3>
-                      <p className="text-gray-600 text-sm">
-                        {t(event.cropKey)}
-                      </p>
-                    </div>
-                    <ChevronRight size={20} className="text-secondary-500" />
-                  </div>
+                  <h4 className="font-semibold text-primary-600 mb-1">
+                    {t(event.titleKey)}
+                  </h4>
+                  <p className="text-xs text-gray-600">
+                    {t("crop")}: {t(event.cropKey)}
+                  </p>
                 </div>
               ))}
             </div>
-          ) : (
-            <div className="card text-center py-8">
-              <p className="text-gray-500">{t("noEvents")}</p>
+          </div>
+        )}
+
+        {/* Active Alerts - Dropdown */}
+        <div className="card border-2 border-red-300 bg-red-50">
+          <button
+            onClick={() => setShowAlerts(!showAlerts)}
+            className="w-full flex items-center justify-between"
+          >
+            <div className="flex items-center gap-3 flex-1">
+              <AlertTriangle size={20} className="text-red-600" />
+              <div className="text-left">
+                <h3 className="font-bold text-red-700">
+                  {t("activeAlerts")}
+                </h3>
+                <p className="text-xs text-red-600">
+                  {mockAlerts.length} {t("alertsActive")}
+                </p>
+              </div>
+            </div>
+            <ChevronRight
+              size={20}
+              className={`text-red-600 transition-transform ${
+                showAlerts ? "rotate-90" : ""
+              }`}
+            />
+          </button>
+
+          {/* Alerts Details - Expandable */}
+          {showAlerts && (
+            <div className="mt-4 pt-4 border-t-2 border-red-300 space-y-3">
+              {mockAlerts.map((alert) => {
+                const styles = getSeverityStyles(alert.severity);
+                return (
+                  <div
+                    key={alert.id}
+                    className={`p-3 rounded-lg border ${styles.bg} ${styles.border}`}
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <h4 className={`font-semibold ${styles.text} text-sm`}>
+                        {t(alert.titleKey)}
+                      </h4>
+                      <span className={`px-2 py-0.5 rounded text-xs font-bold text-white ${styles.badge}`}>
+                        {alert.severity.toUpperCase()}
+                      </span>
+                    </div>
+                    <p className="text-gray-700 text-xs mb-1">
+                      {t(alert.descriptionKey)}
+                    </p>
+                    <p className="text-gray-600 text-xs">
+                      {t("validUntilDate")} {alert.validUntil}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
           )}
-        </div>
-
-        {/* Alerts */}
-        <div>
-          <div className="flex items-center gap-2 mb-4">
-            <AlertTriangle size={24} className="text-red-500" />
-            <h2 className="text-lg font-bold text-primary-500">
-              {t("activeAlerts")}
-            </h2>
-          </div>
-          <div className="space-y-3">
-            {mockAlerts.map((alert) => {
-              const styles = getSeverityStyles(alert.severity);
-              return (
-                <div
-                  key={alert.id}
-                  className={`p-4 rounded-lg border-2 ${styles.bg} ${styles.border}`}
-                >
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className={`font-bold ${styles.text} flex-1 mr-3`}>
-                      {t(alert.titleKey)}
-                    </h3>
-                    <span
-                      className={`px-2 py-1 rounded text-xs font-bold text-white ${styles.badge}`}
-                    >
-                      {alert.severity.toUpperCase()}
-                    </span>
-                  </div>
-                  <p className="text-gray-700 text-sm mb-2">
-                    {t(alert.descriptionKey)}
-                  </p>
-                  <p className="text-gray-600 text-xs">
-                    {t("validUntilDate")} {alert.validUntil}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
         </div>
 
         {/* Tip */}
