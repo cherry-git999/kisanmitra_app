@@ -333,7 +333,7 @@ export default function Page() {
 
                   <button
                     onClick={handleLoginSubmit}
-                    className="w-full bg-crop-600 text-white py-2 rounded hover:bg-crop-700 transition-colors"
+                    className="w-full bg-primary-600 text-white py-2 rounded hover:bg-primary-700 transition-colors"
                   >
                     {otpSent ? t("verifyOtp") : t("continueBtn")}
                   </button>
@@ -343,7 +343,7 @@ export default function Page() {
                       <>
                         {t("alreadyHaveAccount")}{" "}
                         <button
-                          className="text-crop-600 font-semibold"
+                          className="text-primary-600 font-semibold"
                           onClick={() => setIsSignup(false)}
                         >
                           {t("login")}
@@ -353,7 +353,7 @@ export default function Page() {
                       <>
                         {t("newHere")}{" "}
                         <button
-                          className="text-crop-600 font-semibold"
+                          className="text-primary-600 font-semibold"
                           onClick={() => setIsSignup(true)}
                         >
                           {t("signUp")}
@@ -365,30 +365,30 @@ export default function Page() {
               </div>
             ) : (
               <div>
-                <h2 className="text-xl font-semibold text-center mb-4 text-crop-700">
+                <h2 className="text-xl font-semibold text-center mb-4 text-primary-700">
                   {t("profileTitle")}
                 </h2>
-                <p className="text-crop-900">
+                <p className="text-primary-900">
                   <strong>{t("nameField")}:</strong> {user.name}
                 </p>
-                <p className="text-crop-900">
+                <p className="text-primary-900">
                   <strong>{t("phoneField")}:</strong> {user.phone}
                 </p>
-                <p className="text-crop-900">
+                <p className="text-primary-900">
                   <strong>{t("cropsField")}:</strong> {user.crops}
                 </p>
-                <p className="text-crop-900">
+                <p className="text-primary-900">
                   <strong>{t("farmingTypeField")}:</strong> {user.type}
                 </p>
 
                 <div className="mt-4 mb-4">
-                  <label className="flex items-center gap-2 mb-2 text-sm font-semibold text-crop-700">
+                  <label className="flex items-center gap-2 mb-2 text-sm font-semibold text-primary-700">
                     <Settings size={16} /> <span>{t("language")}</span>
                   </label>
                   <select
                     value={selectedLanguage || language}
                     onChange={(e) => handleLanguageSelect(e.target.value)}
-                    className="w-full border-2 border-crop-300 p-2 rounded text-crop-700 focus:outline-none focus:border-crop-600"
+                    className="w-full border-2 border-primary-300 p-2 rounded text-primary-700 focus:outline-none focus:border-primary-600"
                   >
                     {languageOptions.map((opt) => (
                       <option key={opt.value} value={opt.value}>
@@ -405,7 +405,7 @@ export default function Page() {
                     setProfileOpen(false);
                     window.scrollTo({ top: 0 });
                   }}
-                  className="w-full bg-harvest-500 hover:bg-harvest-600 text-white py-2 rounded mt-4 flex items-center justify-center gap-2 transition-colors font-semibold"
+                  className="w-full bg-secondary-500 hover:bg-orange-600 text-white py-2 rounded mt-4 flex items-center justify-center gap-2 transition-colors font-semibold"
                 >
                   <ClipboardList size={18} />
                   <span>{t("myLogs")}</span>

@@ -123,9 +123,9 @@ export default function CalendarView() {
   const getEventIcon = (type: string) => {
     switch (type) {
       case "planting":
-        return <Sprout size={20} className="text-crop-600" />;
+        return <Sprout size={20} className="text-primary-600" />;
       case "harvesting":
-        return <Scissors size={20} className="text-harvest-600" />;
+        return <Scissors size={20} className="text-orange-600" />;
       default:
         return <CalendarIcon size={20} className="text-primary-600" />;
     }
@@ -142,17 +142,17 @@ export default function CalendarView() {
         };
       case "medium":
         return {
-          bg: "bg-harvest-50",
-          border: "border-harvest-300",
-          text: "text-harvest-800",
-          badge: "bg-harvest-500",
+          bg: "bg-yellow-50",
+          border: "border-yellow-300",
+          text: "text-yellow-800",
+          badge: "bg-yellow-500",
         };
       default:
         return {
-          bg: "bg-crop-50",
-          border: "border-crop-300",
-          text: "text-crop-800",
-          badge: "bg-crop-500",
+          bg: "bg-primary-50",
+          border: "border-primary-300",
+          text: "text-primary-800",
+          badge: "bg-primary-500",
         };
     }
   };
