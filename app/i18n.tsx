@@ -344,6 +344,7 @@ const translations: Translations = {
     applyNeemTrichodermaSprays: "Apply Neem or Trichoderma sprays.",
     regularMonitoringRemoveInfected:
       "Regular monitoring; remove infected plants.",
+    "What Else ?": "What Else ?",
   },
   hi: {
     aiChatBotTitle: "एआई चैट बॉट",
@@ -672,6 +673,7 @@ const translations: Translations = {
     timelySowingAvoidDisease: "रोग चरम से बचने के लिए समय पर बुवाई।",
     applyNeemTrichodermaSprays: "नीम या ट्राइकोडर्मा स्प्रे लगाएं।",
     regularMonitoringRemoveInfected: "नियमित निगरानी; संक्रमित पौधों को हटाएं।",
+    "What Else ?": "और क्या?",
   },
   te: {
     appTitle: "ఫార్మ్ ఏఐ",
@@ -1005,6 +1007,7 @@ const translations: Translations = {
     applyNeemTrichodermaSprays: "నీమ్ లేదా ట్రైకోడెర్మా స్ప్రేలను వర్తించండి.",
     regularMonitoringRemoveInfected:
       "క్రమం తప్పకుండా పర్యవేక్షణ; సంక్రమిత మొక్కలను తొలగించండి.",
+    "What Else ?": "ఇంకా ఏమిటి?",
   },
 };
 

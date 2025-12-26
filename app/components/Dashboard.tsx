@@ -55,7 +55,7 @@ export default function Dashboard({
       title: t("aiChatBotTitle"),
       subtitle: t("aiChatBotDesc"),
       description: t("aiChatBotDesc"),
-      color: "bg-gradient-to-br from-pink-500 to-pink-600",
+      color: "bg-gradient-to-br from-green-500 via-emerald-500 to-teal-500",
     },
     {
       id: "guides",
@@ -63,7 +63,7 @@ export default function Dashboard({
       title: t("solutionsTitle"),
       subtitle: t("solutionsDesc"),
       description: t("solutionsDesc"),
-      color: "bg-gradient-to-br from-blue-500 to-blue-600",
+      color: "bg-gradient-to-br from-emerald-500 via-green-500 to-lime-500",
     },
     {
       id: "calendar",
@@ -71,7 +71,7 @@ export default function Dashboard({
       title: t("advisoryCalendar"),
       subtitle: t("planAdvisorySub"),
       description: t("planAdvisorySub"),
-      color: "bg-gradient-to-br from-orange-500 to-orange-600",
+      color: "bg-gradient-to-br from-teal-500 via-emerald-500 to-green-500",
     },
     {
       id: "tracking",
@@ -79,7 +79,7 @@ export default function Dashboard({
       title: t("mySuccessLogs"),
       subtitle: t("trackBest"),
       description: t("trackBest"),
-      color: "bg-gradient-to-br from-indigo-500 to-indigo-600",
+      color: "bg-gradient-to-br from-lime-500 via-green-500 to-emerald-500",
     },
     // {
     //   id: "community",
@@ -95,7 +95,7 @@ export default function Dashboard({
       title: t("localSuppliers"),
       subtitle: t("findSuppliersSub"),
       description: t("certifiedSuppliers"),
-      color: "bg-gradient-to-br from-teal-500 to-teal-600",
+      color: "bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500",
     },
   ];
 
@@ -199,9 +199,9 @@ export default function Dashboard({
   }, [language]);
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-primary-50">
+    <div ref={containerRef} className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-teal-50">
       {/* Header */}
-      <div className="bg-gradient-to-br from-primary-600 to-primary-700 text-white px-4 pt-12 pb-6">
+      <div className="bg-gradient-to-br from-emerald-600 via-green-600 to-teal-600 text-white px-4 pt-12 pb-6 shadow-lg">
         <div className="max-w-2xl mx-auto">
           <h1 className="text-2xl sm:text-3xl font-bold mb-2">
             {getGreeting(selectedLanguage)}
@@ -268,7 +268,7 @@ export default function Dashboard({
 
       {/* Main Content */}
       <div className="max-w-2xl mx-auto p-4">
-        {/* Featured - AI Chat Bot */}
+        {/* Featured - AI Chat Bot 
         <div className="mb-6">
           <button
             onClick={() => onFeatureSelect("chatbot")}
@@ -297,8 +297,9 @@ export default function Dashboard({
             </div>
           </button>
         </div>
+        */}
 
-        {/* Featured - AI Photo Analysis */}
+        {/* Featured - AI Photo Analysis 
         <div className="mb-6">
           <button
             onClick={() => onFeatureSelect("photo")}
@@ -321,6 +322,7 @@ export default function Dashboard({
             </div>
           </button>
         </div>
+        */}
 
         {/* All Features */}
         <div>
@@ -356,7 +358,7 @@ export default function Dashboard({
         </div>
 
         {/* Connect with Advisors */}
-        <div className="mt-8 mb-6 bg-gradient-to-br from-orange-50 to-yellow-50 border-2 border-orange-300 rounded-xl p-6">
+        <div className="mt-8 mb-6 bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 border-2 border-orange-400 rounded-xl p-6 shadow-md">
           <h2 className="text-lg font-bold text-orange-800 mb-4">
             {t("connectWithAdvisors")}
           </h2>
@@ -412,7 +414,7 @@ export default function Dashboard({
         </div>
 
         {/* Tips */}
-        <div className="mt-8 card bg-gradient-to-r from-primary-100 to-secondary-50 border-2 border-primary-500">
+        <div className="mt-8 card bg-gradient-to-r from-emerald-100 via-teal-50 to-cyan-100 border-2 border-emerald-400 shadow-md">
           <h3 className="font-bold text-primary-700 mb-2 flex items-center gap-2">
             <Sparkles size={20} /> {t("dailyTip")}
           </h3>

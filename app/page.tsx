@@ -15,6 +15,10 @@ import {
   LogOut,
   MessageSquare,
   ScanLine,
+  FileText,
+  Sprout,
+  ShoppingCart,
+  Sparkles,
 } from "lucide-react";
 
 import PhotoAnalysis from "./components/PhotoAnalysis";
@@ -27,6 +31,10 @@ import SplashScreen from "./components/SplashScreen";
 import LanguageSelection from "./components/LanguageSelection";
 import Dashboard from "./components/Dashboard";
 import ChartBot from "./components/ChartBot";
+import Plan from "./components/Plan";
+import Grow from "./components/Grow";
+import Sell from "./components/Sell";
+import FeaturesComing from "./components/FeaturesComing";
 
 import { useI18n } from "./i18n";
 
@@ -45,7 +53,10 @@ function useLocalizedTabs(t: (k: string) => string) {
         icon: ScanLine,
         component: PhotoAnalysis,
       },
-      { id: "guides", label: t("guides"), icon: BookOpen, component: Guides },
+      { id: "guides", 
+        label: t("guides"), 
+        icon: BookOpen, 
+        component: Guides },
       {
         id: "community",
         label: t("community"),
@@ -70,12 +81,36 @@ function useLocalizedTabs(t: (k: string) => string) {
         icon: ClipboardList,
         component: Tracking,
       },
+      {
+        id: "plan",
+        label: "Plan",
+        icon: FileText,
+        component: Plan,
+      },
+      {
+        id: "grow",
+        label: "Grow",
+        icon: Sprout,
+        component: Grow,
+      },
+      {
+        id: "sell",
+        label: "Sell",
+        icon: ShoppingCart,
+        component: Sell,
+      },
+      {
+        id: "features",
+        label: "Features Coming",
+        icon: Sparkles,
+        component: FeaturesComing,
+      },
     ],
     [t],
   );
 }
 
-const bottomNavTabs = ["chatbot", "photo", "suppliers", "community"];
+const bottomNavTabs = ["plan", "grow", "sell", "features"];
 
 export default function Page() {
   const { t, setLanguage, language } = useI18n();
@@ -175,9 +210,10 @@ export default function Page() {
     <div className="min-h-screen bg-primary-50 flex flex-col">
       {/* Top Navbar */}
       <header className="bg-primary-600 text-white flex items-center justify-between px-4 py-3 shadow-md relative">
-        <button onClick={() => setMenuOpen(!menuOpen)}>
+        {/* <button onClick={() => setMenuOpen(!menuOpen)}>
           <Menu size={26} />
-        </button>
+        </button> */}
+        <div></div>
 
         <h1 className="text-lg font-bold absolute left-1/2 -translate-x-1/2">
           {t("appTitle")}
@@ -433,7 +469,11 @@ export default function Page() {
             isActive={activeTab === "" || activeTab === "dashboard"}
           />
         ) : (
-          <ActiveComponent />
+          <ActiveComponent 
+            onFeatureSelect={handleFeatureSelect}
+            selectedLanguage={selectedLanguage}
+            isActive={true}
+          />
         )}
       </div>
 
@@ -453,6 +493,7 @@ export default function Page() {
             .map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
+              const isFeatures = tab.id === "features";
               return (
                 <button
                   key={tab.id}
@@ -467,7 +508,7 @@ export default function Page() {
                   }`}
                 >
                   <Icon size={20} strokeWidth={2.5} />
-                  <span className="text-xs font-semibold mt-1">
+                  <span className={`${isFeatures ? "text-[0.6rem]" : "text-xs"} font-semibold mt-1`}>
                     {tab.label}
                   </span>
                 </button>
