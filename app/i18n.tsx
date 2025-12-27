@@ -10,7 +10,7 @@ const translations: Translations = {
     aiChatBotDesc: "Smart Farming Assistant",
     solutionsTitle: "Solutions & Guides",
     solutionsDesc: "Step-by-step help with audio support",
-    appTitle: "Farm AI",
+    appTitle: "Kisanmitra",
     quickLinks: "Quick Links",
     home: "Home",
     language: "Language",
@@ -46,8 +46,8 @@ const translations: Translations = {
     appearance: "Appearance",
     appearanceSettings: "Appearance Settings",
     // ChartBot
-    aiChatbotTitle: "Farm AI Chatbot",
-    chatbotHello: "Hello! 👋 I’m Farm AI. How can I help you today?",
+    aiChatbotTitle: "Kisanmitra Chatbot",
+    chatbotHello: "Hello! 👋 I’m Kisanmitra. How can I help you today?",
     chatbotThanks: "Thanks for your message! I'll get back soon 🌾",
     typeMessage: "Type your message...",
     voiceComingSoon: "Voice input feature coming soon! 🎙️",
@@ -142,7 +142,7 @@ const translations: Translations = {
     missingSupplier: "Missing a supplier?",
     contactUsAdd: "Contact us to add more local organic suppliers to this list",
     // Tracking
-    mySuccessLogs: "My Success Logs",
+    mySuccessLogs: "Local Storage",
     trackBest: "Track what works best for your farm",
     totalLogs: "Total Logs",
     avgRating: "Avg. Rating",

@@ -8,13 +8,13 @@ export default function SplashScreen() {
         <div className="mb-8 animate-bounce">
           <img
             src="/ll.jpg"
-            alt="Farm AI Logo"
+            alt="Kisanmitra Logo"
             className="mx-auto w-32 h-32 object-cover rounded-full shadow-lg"
           />
         </div>
 
         {/* Title */}
-        <h1 className="text-4xl font-bold mb-4">FARM AI</h1>
+        <h1 className="text-4xl font-bold mb-4">KISANMITRA</h1>
         <p className="text-xl text-primary-100 mb-8">
           Your Organic Farming Assistant
         </p>

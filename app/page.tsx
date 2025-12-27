@@ -101,7 +101,7 @@ function useLocalizedTabs(t: (k: string) => string) {
       },
       {
         id: "features",
-        label: "Features Coming",
+        label: "Upcoming Features",
         icon: Sparkles,
         component: FeaturesComing,
       },
@@ -209,19 +209,10 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-primary-50 flex flex-col">
       {/* Top Navbar */}
-      <header className="bg-primary-600 text-white flex items-center justify-between px-4 py-3 shadow-md relative">
-        {/* <button onClick={() => setMenuOpen(!menuOpen)}>
-          <Menu size={26} />
-        </button> */}
-        <div></div>
-
-        <h1 className="text-lg font-bold absolute left-1/2 -translate-x-1/2">
+      <header className="bg-primary-600 text-white flex items-center justify-center px-4 py-3 shadow-md relative">
+        <h1 className="text-lg font-bold">
           {t("appTitle")}
         </h1>
-
-        <button onClick={() => setProfileOpen(true)}>
-          <User size={26} />
-        </button>
       </header>
 
       {/* Sidebar */}
