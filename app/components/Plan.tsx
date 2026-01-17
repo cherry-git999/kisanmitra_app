@@ -7,6 +7,8 @@ import {
   ArrowRight,
   Sparkles,
   Lock,
+  Telescope,
+  Target,
 } from "lucide-react";
 import { useI18n } from "../i18n";
 
@@ -35,12 +37,21 @@ export default function Plan({
 
   const planFeatures = [
     {
+      id: "farmer-scope",
+      icon: Telescope,
+      title: "Farmer Scope",
+      subtitle: "Analyze and optimize your farm's potential",
+      description: "Get comprehensive insights about your farm performance and growth opportunities",
+      color: "bg-gradient-to-br from-teal-500 via-emerald-500 to-green-500",
+      isAvailable: true,
+    },
+    {
       id: "calendar",
       icon: Calendar,
       title: t("advisoryCalendar"),
       subtitle: t("planAdvisorySub"),
       description: "Get personalized crop calendar and farming schedules",
-      color: "bg-gradient-to-br from-teal-500 via-emerald-500 to-green-500",
+      color: "bg-gradient-to-br from-emerald-500 via-green-500 to-lime-500",
       isAvailable: true,
     },
     {
@@ -88,29 +99,29 @@ export default function Plan({
 
       {/* Main Content */}
       <div className="max-w-2xl mx-auto p-4">
-        {/* Featured - Calendar */}
+        {/* Featured - Farmer Scope */}
         <div className="mb-6">
           <button
-            onClick={() => onFeatureSelect("calendar")}
+            onClick={() => onFeatureSelect("farmer-scope")}
             className="w-full relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95"
           >
             <div className="bg-gradient-to-br from-teal-500 via-emerald-500 to-green-500 p-6 text-white shadow-xl">
               <div className="flex items-center justify-between mb-4">
                 <div className="w-16 h-16 bg-white bg-opacity-20 rounded-2xl flex items-center justify-center">
-                  <Calendar size={32} className="text-white" />
+                  <Telescope size={32} className="text-white" />
                 </div>
                 <div className="bg-green-400 text-green-900 px-3 py-1 rounded-full text-xs font-bold">
                   Available Now
                 </div>
               </div>
               <h3 className="text-2xl font-bold mb-2">
-                {t("advisoryCalendar")}
+                Farmer Scope
               </h3>
               <p className="text-orange-100 mb-4">
-                {t("planAdvisorySub")}
+                Analyze and optimize your farm's potential
               </p>
               <div className="flex items-center gap-2 text-orange-100">
-                <span className="font-semibold">View Calendar</span>
+                <span className="font-semibold">Explore Scope</span>
                 <ArrowRight size={20} />
               </div>
             </div>
@@ -127,7 +138,7 @@ export default function Plan({
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {planFeatures
-              .filter((feature) => feature.id !== "calendar")
+              .filter((feature) => feature.id !== "farmer-scope")
               .map((feature) => {
                 const Icon = feature.icon;
                 return (
@@ -149,12 +160,17 @@ export default function Plan({
                       >
                         <Icon size={24} className="text-white" />
                       </div>
-                      {!feature.isAvailable && (
+                      {feature.id === "calendar" ? (
+                        <div className="flex items-center gap-1 bg-blue-200 text-blue-700 px-2 py-1 rounded-full text-xs font-semibold">
+                          <Sparkles size={12} />
+                          <span>Sample</span>
+                        </div>
+                      ) : !feature.isAvailable ? (
                         <div className="flex items-center gap-1 bg-gray-200 text-gray-700 px-2 py-1 rounded-full text-xs">
                           <Lock size={12} />
                           <span>Coming Soon</span>
                         </div>
-                      )}
+                      ) : null}
                     </div>
                     <h3 className="font-semibold text-primary-700 text-sm mb-1">
                       {feature.title}
@@ -174,7 +190,7 @@ export default function Plan({
             <Sparkles size={20} /> Planning Tip
           </h3>
           <p className="text-primary-800 text-sm">
-            Start with the Advisory Calendar to plan your farming activities based on weather patterns and crop cycles.
+            Use Farmer Scope to get comprehensive insights about your farm's performance and discover growth opportunities.
           </p>
         </div>
       </div>

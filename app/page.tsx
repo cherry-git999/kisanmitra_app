@@ -19,6 +19,8 @@ import {
   Sprout,
   ShoppingCart,
   Sparkles,
+  Telescope,
+  Microscope,
 } from "lucide-react";
 
 import PhotoAnalysis from "./components/PhotoAnalysis";
@@ -35,6 +37,8 @@ import Plan from "./components/Plan";
 import Grow from "./components/Grow";
 import Sell from "./components/Sell";
 import FeaturesComing from "./components/FeaturesComing";
+import FarmerScope from "./components/FarmerScope";
+import PestScope from "./components/PestScope";
 
 import { useI18n } from "./i18n";
 
@@ -80,6 +84,18 @@ function useLocalizedTabs(t: (k: string) => string) {
         label: t("myLogs"),
         icon: ClipboardList,
         component: Tracking,
+      },
+      {
+        id: "farmer-scope",
+        label: "Farmer Scope",
+        icon: Telescope,
+        component: FarmerScope,
+      },
+      {
+        id: "pest-scope",
+        label: "Pest Scope",
+        icon: Microscope,
+        component: PestScope,
       },
       {
         id: "plan",
@@ -459,11 +475,22 @@ export default function Page() {
             selectedLanguage={selectedLanguage}
             isActive={activeTab === "" || activeTab === "dashboard"}
           />
+        ) : activeTab === "farmer-scope" ? (
+          <FarmerScope 
+            onBack={handleBackToDashboard}
+            isActive={true}
+          />
+        ) : activeTab === "pest-scope" ? (
+          <PestScope 
+            onBack={handleBackToDashboard}
+            isActive={true}
+          />
         ) : (
           <ActiveComponent 
             onFeatureSelect={handleFeatureSelect}
             selectedLanguage={selectedLanguage}
             isActive={true}
+            onBack={handleBackToDashboard}
           />
         )}
       </div>
