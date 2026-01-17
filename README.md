@@ -1,8 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# KisanMitra App 🌾
 
-## Getting Started
+A comprehensive agricultural management platform built with Next.js, designed to empower farmers with modern tools and resources for better farming practices.
 
-First, run the development server:
+## 🚀 Features
+
+### Core Modules
+- **AI Chat Assistant** - Intelligent chatbot for farming queries and guidance
+- **Photo Analysis** - AI-powered crop and pest detection using image analysis
+- **FarmerScope** - Real-time farm advisories from kisanmitra.net
+- **PestScope** - Latest pest alerts and management strategies
+- **Guides** - Comprehensive farming guides and best practices
+- **Community** - Connect with other farmers and share knowledge
+- **Calendar** - Crop planning and seasonal activity management
+- **Suppliers** - Find and connect with agricultural suppliers
+- **Tracking** - Monitor crop growth and farm activities
+- **Dashboard** - Overview of all farm operations and analytics
+- **Plan** - Strategic crop planning and resource management
+- **Grow** - Growth tracking and optimization tools
+- **Sell** - Marketplace features for selling produce
+
+### Technical Features
+- 🌍 Multi-language support (i18n)
+- 📱 Responsive mobile-first design
+- 🎨 Modern UI with Tailwind CSS
+- 🔄 Real-time data fetching with Next.js API routes
+- 🌐 Web scraping integration for live agricultural advisories
+- ⚡ Optimized performance with React 19
+
+## 📦 Dependencies
+
+### Production Dependencies
+```json
+{
+  "cheerio": "^1.1.2",           // Web scraping for farm advisories
+  "lucide-react": "^0.548.0",    // Modern icon library
+  "next": "^16.0.2",             // React framework
+  "prettier": "^3.6.2",          // Code formatting
+  "react": "19.2.0",             // UI library
+  "react-dom": "19.2.0"          // React DOM renderer
+}
+```
+
+### Development Dependencies
+```json
+{
+  "@types/node": "^20",          // Node.js type definitions
+  "@types/react": "^19",         // React type definitions
+  "@types/react-dom": "^19",     // React DOM type definitions
+  "autoprefixer": "^10.4.21",    // PostCSS plugin for CSS prefixing
+  "eslint": "^9",                // JavaScript linter
+  "eslint-config-next": "^16.0.2", // Next.js ESLint configuration
+  "postcss": "^8.5.6",           // CSS transformer
+  "tailwindcss": "^3.4.14",      // Utility-first CSS framework
+  "tailwindcss-animate": "^1.0.7", // Animation utilities for Tailwind
+  "typescript": "^5"             // TypeScript compiler
+}
+```
+
+## 🛠️ Installation
+
+1. **Clone the repository**
+```bash
+git clone https://github.com/Agriworks/kisanmitra_app.git
+cd kisanmitra_app
+```
+
+2. **Install dependencies**
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+## 🚀 Getting Started
+
+### Development Server
+
+Run the development server:
 
 ```bash
 npm run dev
@@ -14,23 +90,136 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev      # Start development server
+npm run build    # Build for production
+npm run start    # Start production server
+npm run lint     # Run ESLint
+npm run format   # Format code with Prettier
+```
 
-## Learn More
+## 📁 Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+kisanmitra_app/
+├── app/
+│   ├── api/                    # API routes
+│   │   ├── farmer-scope/       # Farm advisory scraping API
+│   │   └── pest-scope/         # Pest alert scraping API
+│   ├── components/             # React components
+│   │   ├── CalendarView.tsx
+│   │   ├── ChartBot.tsx
+│   │   ├── Community.tsx
+│   │   ├── Dashboard.tsx
+│   │   ├── FarmerScope.tsx
+│   │   ├── FeaturesComing.tsx
+│   │   ├── Grow.tsx
+│   │   ├── Guides.tsx
+│   │   ├── LanguageSelection.tsx
+│   │   ├── PestScope.tsx
+│   │   ├── PhotoAnalysis.tsx
+│   │   ├── Plan.tsx
+│   │   ├── Sell.tsx
+│   │   ├── SplashScreen.tsx
+│   │   ├── Suppliers.tsx
+│   │   └── Tracking.tsx
+│   ├── globals.css             # Global styles
+│   ├── i18n.tsx                # Internationalization setup
+│   ├── layout.tsx              # Root layout
+│   ├── page.tsx                # Main page
+│   └── providers.tsx           # Context providers
+├── public/                     # Static assets
+├── eslint.config.mjs           # ESLint configuration
+├── next.config.ts              # Next.js configuration
+├── package.json                # Project dependencies
+├── postcss.config.js           # PostCSS configuration
+├── tailwind.config.js          # Tailwind CSS configuration
+└── tsconfig.json               # TypeScript configuration
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🎨 Styling
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project uses:
+- **Tailwind CSS** - Utility-first CSS framework
+- **tailwindcss-animate** - Pre-built animations
+- **Lucide React** - Beautiful, consistent icons
+- **PostCSS** - CSS transformations
 
-## Deploy on Vercel
+## 🌐 API Routes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### FarmerScope API (`/api/farmer-scope`)
+- Scrapes live farm advisories from kisanmitra.net
+- Returns categorized farming advice and updates
+- Provides latest agricultural news and recommendations
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### PestScope API (`/api/pest-scope`)
+- Fetches real-time pest alerts
+- Returns pest management strategies
+- Provides preventive measures and treatments
+
+## 🔧 Configuration
+
+### TypeScript
+The project is fully typed with TypeScript for better developer experience and code quality.
+
+### ESLint
+Configured with Next.js recommended rules for consistent code style.
+
+### Prettier
+Automatic code formatting on save for clean and consistent code.
+
+## 🌍 Internationalization
+
+The app supports multiple languages through the i18n system in `app/i18n.tsx`. Language selection is available through the LanguageSelection component.
+
+## 📱 Responsive Design
+
+Built mobile-first with responsive breakpoints:
+- Mobile: < 768px
+- Tablet: 768px - 1024px
+- Desktop: > 1024px
+
+## 🚀 Deployment
+
+### Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme).
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Agriworks/kisanmitra_app)
+
+### Build for Production
+
+```bash
+npm run build
+npm run start
+```
+
+## 📚 Learn More
+
+To learn more about the technologies used:
+
+- [Next.js Documentation](https://nextjs.org/docs) - Learn about Next.js features and API
+- [React Documentation](https://react.dev) - Learn React
+- [Tailwind CSS](https://tailwindcss.com/docs) - Utility-first CSS framework
+- [TypeScript](https://www.typescriptlang.org/docs) - JavaScript with syntax for types
+- [Cheerio](https://cheerio.js.org/) - Fast, flexible web scraping
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is private and proprietary.
+
+## 👥 Team
+
+Developed by Agriworks
+
+---
+
+**KisanMitra** - Empowering farmers through technology 🌾
