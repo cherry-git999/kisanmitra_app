@@ -29,6 +29,31 @@ interface PestCategory {
   image: string | null;
 }
 
+interface PestItem {
+  id: string;
+  title: string;
+  slug: string;
+  image: string | null;
+  excerpt: string;
+  price: string | null;
+  url: string;
+}
+
+interface PestDetail {
+  id: string;
+  title: string;
+  images: string[];
+  causedBy: string;
+  problemCategory: string;
+  symptoms: string;
+  comments: string;
+  management: string;
+  control: string;
+  sku: string;
+  category: string | null;
+  url: string;
+}
+
 interface PestScopeProps {
   onBack: () => void;
   isActive?: boolean;
@@ -37,8 +62,14 @@ interface PestScopeProps {
 export default function PestScope({ onBack, isActive }: PestScopeProps) {
   const [advisories, setAdvisories] = useState<PestAdvisory[]>([]);
   const [categories, setCategories] = useState<PestCategory[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<PestCategory | null>(null);
+  const [pests, setPests] = useState<PestItem[]>([]);
+  const [selectedPest, setSelectedPest] = useState<PestItem | null>(null);
+  const [pestDetail, setPestDetail] = useState<PestDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
+  const [pestsLoading, setPestsLoading] = useState(false);
+  const [pestDetailLoading, setPestDetailLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -69,6 +100,44 @@ export default function PestScope({ onBack, isActive }: PestScopeProps) {
     }
   };
 
+  const fetchCategoryPests = async (category: PestCategory) => {
+    setPestsLoading(true);
+    setSelectedCategory(category);
+    setPests([]);
+    
+    try {
+      const response = await fetch(`/api/pest-scope/category/${category.slug}`);
+      const data = await response.json();
+      
+      if (data.success && data.data) {
+        setPests(data.data);
+      }
+    } catch (err) {
+      console.error('Error fetching category pests:', err);
+    } finally {
+      setPestsLoading(false);
+    }
+  };
+
+  const fetchPestDetails = async (pest: PestItem) => {
+    setPestDetailLoading(true);
+    setSelectedPest(pest);
+    setPestDetail(null);
+    
+    try {
+      const response = await fetch(`/api/pest-scope/pest/${pest.slug}?url=${encodeURIComponent(pest.url)}`);
+      const data = await response.json();
+      
+      if (data.success && data.data) {
+        setPestDetail(data.data);
+      }
+    } catch (err) {
+      console.error('Error fetching pest details:', err);
+    } finally {
+      setPestDetailLoading(false);
+    }
+  };
+
   const fetchAdvisories = async () => {
     setLoading(true);
     setError(null);
@@ -92,6 +161,28 @@ export default function PestScope({ onBack, isActive }: PestScopeProps) {
 
   const handleRefresh = () => {
     fetchAdvisories();
+  };
+
+  const handleCategoryClick = (e: React.MouseEvent, category: PestCategory) => {
+    e.preventDefault();
+    fetchCategoryPests(category);
+  };
+
+  const handleBackToCategories = () => {
+    setSelectedCategory(null);
+    setSelectedPest(null);
+    setPests([]);
+    setPestDetail(null);
+  };
+
+  const handleBackToPests = () => {
+    setSelectedPest(null);
+    setPestDetail(null);
+  };
+
+  const handlePestClick = (e: React.MouseEvent, pest: PestItem) => {
+    e.preventDefault();
+    fetchPestDetails(pest);
   };
 
   return (
@@ -118,56 +209,234 @@ export default function PestScope({ onBack, isActive }: PestScopeProps) {
 
       {/* Main Content */}
       <div className="max-w-2xl mx-auto p-4">
-        {/* Categories Section */}
-        <div className="mb-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <Bug size={20} className="text-emerald-600" />
-            Crop Categories
-          </h2>
-          
-          {categoriesLoading ? (
-            <div className="flex items-center justify-center py-8">
-              <Loader2 size={32} className="text-emerald-600 animate-spin" />
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {categories.map((category) => (
-                <a
-                  key={category.slug}
-                  href={category.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 border border-gray-200 hover:border-emerald-400"
-                >
-                  {/* Image */}
-                  {category.image ? (
-                    <div className="aspect-square overflow-hidden bg-gray-100">
+        {/* Show Categories, Pests, or Pest Details */}
+        {selectedPest && pestDetail ? (
+          /* Individual Pest Detail Section */
+          <div className="mb-6">
+            <button
+              onClick={handleBackToPests}
+              className="flex items-center gap-2 mb-4 text-emerald-600 hover:text-emerald-700 font-medium"
+            >
+              <ArrowLeft size={20} />
+              <span>Back to {selectedCategory?.name}</span>
+            </button>
+            
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              {pestDetail.title}
+            </h2>
+
+            {/* Images Gallery */}
+            {pestDetail.images.length > 0 && (
+              <div className="mb-6">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {pestDetail.images.map((image, idx) => (
+                    <div key={idx} className="aspect-square rounded-lg overflow-hidden bg-gray-100 shadow-md">
                       <img
-                        src={category.image}
-                        alt={category.name}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                        src={image}
+                        alt={`${pestDetail.title} - Image ${idx + 1}`}
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                       />
                     </div>
-                  ) : (
-                    <div className="aspect-square bg-gradient-to-br from-emerald-100 to-green-100 flex items-center justify-center">
-                      <Bug size={40} className="text-emerald-600" />
-                    </div>
-                  )}
-                  
-                  {/* Category Name */}
-                  <div className="p-2 bg-white">
-                    <h3 className="text-xs sm:text-sm font-semibold text-gray-800 line-clamp-2 text-center group-hover:text-emerald-600 transition-colors">
-                      {category.name}
-                    </h3>
-                  </div>
-                  
-                  {/* Hover Overlay */}
-                  <div className="absolute inset-0 bg-emerald-600/0 group-hover:bg-emerald-600/10 transition-all duration-200 pointer-events-none" />
-                </a>
-              ))}
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Structured Content */}
+            <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200 space-y-4">
+              {pestDetail.causedBy && (
+                <div>
+                  <h3 className="font-bold text-gray-900 mb-1">Caused by:</h3>
+                  <p className="text-gray-700 text-sm">{pestDetail.causedBy}</p>
+                </div>
+              )}
+
+              {pestDetail.problemCategory && (
+                <div>
+                  <h3 className="font-bold text-gray-900 mb-1">Problem Category:</h3>
+                  <p className="text-gray-700 text-sm">{pestDetail.problemCategory}</p>
+                </div>
+              )}
+
+              {pestDetail.symptoms && (
+                <div>
+                  <h3 className="font-bold text-red-900 mb-1 flex items-center gap-2">
+                    <AlertCircle size={16} />
+                    Symptoms:
+                  </h3>
+                  <p className="text-gray-700 text-sm leading-relaxed">{pestDetail.symptoms}</p>
+                </div>
+              )}
+
+              {pestDetail.comments && (
+                <div>
+                  <h3 className="font-bold text-gray-900 mb-1">Comments:</h3>
+                  <p className="text-gray-700 text-sm leading-relaxed">{pestDetail.comments}</p>
+                </div>
+              )}
+
+              {pestDetail.management && (
+                <div>
+                  <h3 className="font-bold text-green-900 mb-1 flex items-center gap-2">
+                    <Bug size={16} />
+                    Management:
+                  </h3>
+                  <p className="text-gray-700 text-sm leading-relaxed">{pestDetail.management}</p>
+                </div>
+              )}
+
+              {pestDetail.control && (
+                <div>
+                  <h3 className="font-bold text-green-900 mb-1">Control:</h3>
+                  <p className="text-gray-700 text-sm leading-relaxed">{pestDetail.control}</p>
+                </div>
+              )}
+
+              {pestDetail.sku && (
+                <div>
+                  <h3 className="font-bold text-gray-900 mb-1">SKU:</h3>
+                  <p className="text-gray-700 text-sm">{pestDetail.sku}</p>
+                </div>
+              )}
+
+              {pestDetail.category && (
+                <div>
+                  <h3 className="font-bold text-gray-900 mb-1">Category:</h3>
+                  <p className="text-gray-700 text-sm">{pestDetail.category}</p>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </div>
+        ) : selectedPest && pestDetailLoading ? (
+          /* Loading Pest Details */
+          <div className="flex items-center justify-center py-12">
+            <Loader2 size={48} className="text-emerald-600 animate-spin" />
+          </div>
+        ) : !selectedCategory ? (
+          /* Categories Section */
+          <div className="mb-6">
+            <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <Bug size={20} className="text-emerald-600" />
+              Crop Categories
+            </h2>
+            
+            {categoriesLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 size={32} className="text-emerald-600 animate-spin" />
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {categories.map((category) => (
+                  <button
+                    key={category.slug}
+                    onClick={(e) => handleCategoryClick(e, category)}
+                    className="group relative bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 border border-gray-200 hover:border-emerald-400 text-left"
+                  >
+                    {/* Image */}
+                    {category.image ? (
+                      <div className="aspect-square overflow-hidden bg-gray-100">
+                        <img
+                          src={category.image}
+                          alt={category.name}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                        />
+                      </div>
+                    ) : (
+                      <div className="aspect-square bg-gradient-to-br from-emerald-100 to-green-100 flex items-center justify-center">
+                        <Bug size={40} className="text-emerald-600" />
+                      </div>
+                    )}
+                    
+                    {/* Category Name */}
+                    <div className="p-2 bg-white">
+                      <h3 className="text-xs sm:text-sm font-semibold text-gray-800 line-clamp-2 text-center group-hover:text-emerald-600 transition-colors">
+                        {category.name}
+                      </h3>
+                    </div>
+                    
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-emerald-600/0 group-hover:bg-emerald-600/10 transition-all duration-200 pointer-events-none" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        ) : (
+          /* Pest Details Section */
+          <div className="mb-6">
+            <button
+              onClick={handleBackToCategories}
+              className="flex items-center gap-2 mb-4 text-emerald-600 hover:text-emerald-700 font-medium"
+            >
+              <ArrowLeft size={20} />
+              <span>Back to Categories</span>
+            </button>
+            
+            <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <Bug size={20} className="text-emerald-600" />
+              {selectedCategory.name} - Pests & Diseases
+            </h2>
+            
+            {pestsLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 size={32} className="text-emerald-600 animate-spin" />
+              </div>
+            ) : pests.length > 0 ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {pests.map((pest) => (
+                  <button
+                    key={pest.id}
+                    onClick={(e) => handlePestClick(e, pest)}
+                    className="group relative bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 border border-gray-200 hover:border-emerald-400 text-left"
+                  >
+                    {/* Image */}
+                    {pest.image ? (
+                      <div className="aspect-square overflow-hidden bg-gray-100">
+                        <img
+                          src={pest.image}
+                          alt={pest.title}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                        />
+                      </div>
+                    ) : (
+                      <div className="aspect-square bg-gradient-to-br from-red-100 to-orange-100 flex items-center justify-center">
+                        <Bug size={40} className="text-red-600" />
+                      </div>
+                    )}
+                    
+                    {/* Pest Info */}
+                    <div className="p-2 bg-white">
+                      <h3 className="text-xs sm:text-sm font-semibold text-gray-800 line-clamp-2 group-hover:text-emerald-600 transition-colors">
+                        {pest.title}
+                      </h3>
+                      {pest.excerpt && (
+                        <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+                          {pest.excerpt}
+                        </p>
+                      )}
+                    </div>
+                    
+                    {/* External Link Icon */}
+                    <div className="absolute top-2 right-2 bg-white/90 rounded-full p-1">
+                      <ExternalLink size={14} className="text-emerald-600" />
+                    </div>
+                    
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-emerald-600/0 group-hover:bg-emerald-600/10 transition-all duration-200 pointer-events-none" />
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="bg-gray-50 rounded-xl p-8 text-center">
+                <Bug size={48} className="mx-auto text-gray-400 mb-4" />
+                <h3 className="font-semibold text-gray-900 mb-2">No Pests Found</h3>
+                <p className="text-gray-600 text-sm">
+                  No pest information available for this crop yet.
+                </p>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Refresh Button */}
         <div className="flex justify-end mb-4">
