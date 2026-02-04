@@ -87,13 +87,13 @@ function useLocalizedTabs(t: (k: string) => string) {
       },
       {
         id: "farmer-scope",
-        label: "Farmer Scope",
+        label: "FarmScope",
         icon: Telescope,
         component: FarmerScope,
       },
       {
         id: "pest-scope",
-        label: "Pest Scope",
+        label: "PestoScope",
         icon: Microscope,
         component: PestScope,
       },
@@ -166,7 +166,7 @@ export default function Page() {
     const timer = setTimeout(() => {
       setShowSplash(false);
       setShowLanguageSelection(true);
-    }, 5000);
+    }, 500);
     return () => clearTimeout(timer);
   }, []);
 
@@ -500,9 +500,13 @@ export default function Page() {
         <div className="flex justify-around items-center">
           <button
             onClick={handleBackToDashboard}
-            className="flex flex-col items-center p-2"
+            className={`flex flex-col items-center p-2 ${
+              activeTab === "" || activeTab === "dashboard"
+                ? "text-primary-600 bg-primary-50"
+                : "text-secondary-500"
+            }`}
           >
-            <Home size={20} />
+            <Home size={20} strokeWidth={2.5} />
             <span className="text-xs font-semibold">Home</span>
           </button>
 

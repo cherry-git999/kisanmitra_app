@@ -39,7 +39,7 @@ export default function Grow({
     {
       id: "pest-scope",
       icon: Microscope,
-      title: "Pest Scope",
+      title: "Pestoscope",
       subtitle: "Advanced pest detection and analysis",
       description: "Comprehensive pest identification and management insights",
       color: "bg-gradient-to-br from-emerald-500 via-green-500 to-lime-500",
@@ -125,7 +125,7 @@ export default function Grow({
                 </div>
               </div>
               <h3 className="text-2xl font-bold mb-2">
-                Pest Scope
+                Pestoscope
               </h3>
               <p className="text-blue-100 mb-4">
                 Advanced pest detection and analysis
@@ -200,7 +200,7 @@ export default function Grow({
             <Sparkles size={20} /> Growing Tip
           </h3>
           <p className="text-green-800 text-sm">
-            Use Pest Scope for advanced pest detection and analysis to protect your crops and maximize your yield.
+            Use Pestoscope for advanced pest detection and analysis to protect your crops and maximize your yield.
           </p>
         </div>
       </div>

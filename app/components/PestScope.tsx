@@ -82,7 +82,7 @@ export default function PestScope({ onBack, isActive }: PestScopeProps) {
           </button>
           <div className="flex items-center gap-3 mb-2">
             <Microscope size={32} />
-            <h1 className="text-2xl sm:text-3xl font-bold">Pest Scope</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold">PestoScope</h1>
           </div>
           <p className="text-emerald-100 text-sm sm:text-base">
             Advanced pest detection and management solutions
@@ -211,10 +211,10 @@ export default function PestScope({ onBack, isActive }: PestScopeProps) {
         {!loading && advisories.length > 0 && (
           <div className="mt-6 bg-gradient-to-r from-emerald-100 via-green-50 to-lime-100 rounded-xl p-4 border-2 border-emerald-300">
             <h3 className="font-bold text-emerald-800 mb-2 flex items-center gap-2">
-              <Microscope size={20} /> About Pest Scope
+              <Microscope size={20} /> About PestoScope
             </h3>
             <p className="text-emerald-900 text-sm leading-relaxed">
-              Pest Scope provides comprehensive pest management information from Pestoscope, 
+              PestoScope provides comprehensive pest management information from Pestoscope, 
               including pest identification, non-pesticidal management techniques, organic pest 
               control methods, and sustainable pest management practices. Click on any advisory 
               to learn more about protecting your crops naturally.

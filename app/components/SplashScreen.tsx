@@ -5,7 +5,7 @@ export default function SplashScreen() {
     <div className="min-h-screen bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
       <div className="text-center text-white">
         {/* Logo Section */}
-        <div className="mb-8 animate-bounce">
+        <div className="mb-8">
           <img
             src="/ll.jpg"
             alt="Kisanmitra Logo"

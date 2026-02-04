@@ -2,11 +2,8 @@ import React, { useState, useEffect } from "react";
 import {
   ClipboardList,
   Plus,
-  Star,
   Calendar,
   X,
-  CheckCircle,
-  AlertCircle,
 } from "lucide-react";
 import { useI18n } from "../i18n";
 
@@ -16,24 +13,7 @@ const mockLogs = [
     date: "2025-08-28",
     solution: "logNeemOilPestControl",
     outcome: "logNeemOilPestControlOutcome",
-    rating: 5,
     crop: "cropTomato",
-  },
-  {
-    id: 2,
-    date: "2025-09-20",
-    solution: "logCompostTeaApplication",
-    outcome: "logCompostTeaApplicationOutcome",
-    rating: 4,
-    crop: "cropMixedVegetables",
-  },
-  {
-    id: 3,
-    date: "2025-10-11",
-    solution: "logCompanionPlanting",
-    outcome: "logCompanionPlantingOutcome",
-    rating: 5,
-    crop: "cropOkra",
   },
 ];
 
@@ -44,7 +24,6 @@ export default function Tracking() {
   const [newLog, setNewLog] = useState({
     solution: "",
     outcome: "",
-    rating: 0,
     crop: "",
   });
 
@@ -56,63 +35,21 @@ export default function Tracking() {
   }, []);
 
   const handleSaveLog = () => {
-    if (newLog.solution && newLog.outcome && newLog.rating > 0) {
+    if (newLog.solution && newLog.outcome) {
       const log = {
         id: logs.length + 1,
         date: new Date().toISOString().split("T")[0],
         solution: newLog.solution,
         outcome: newLog.outcome,
-        rating: newLog.rating,
         crop: newLog.crop || "Not specified",
       };
       setLogs([log, ...logs]);
-      setNewLog({ solution: "", outcome: "", rating: 0, crop: "" });
+      setNewLog({ solution: "", outcome: "", crop: "" });
       setShowNewLog(false);
     }
   };
 
-  const renderStars = (rating: number, onPress?: (star: number) => void) => {
-    return (
-      <div className="flex gap-1">
-        {[1, 2, 3, 4, 5].map((star) => (
-          <button
-            key={star}
-            onClick={() => onPress && onPress(star)}
-            disabled={!onPress}
-            className={onPress ? "cursor-pointer" : "cursor-default"}
-          >
-            <Star
-              size={20}
-              className={`${star <= rating ? "text-yellow-500 fill-current" : "text-gray-300"}`}
-            />
-          </button>
-        ))}
-      </div>
-    );
-  };
 
-  const getEffectivenessLabel = (rating: number) => {
-    if (rating >= 4)
-      return {
-        label: t("effectivenessHigh"),
-        color: "text-green-600",
-        bg: "bg-green-50",
-        icon: CheckCircle,
-      };
-    if (rating >= 3)
-      return {
-        label: t("effectivenessModerate"),
-        color: "text-yellow-600",
-        bg: "bg-yellow-50",
-        icon: AlertCircle,
-      };
-    return {
-      label: t("effectivenessLow"),
-      color: "text-red-600",
-      bg: "bg-red-50",
-      icon: AlertCircle,
-    };
-  };
 
   if (showNewLog) {
     return (
@@ -130,10 +67,10 @@ export default function Tracking() {
             <button
               onClick={handleSaveLog}
               disabled={
-                !newLog.solution || !newLog.outcome || newLog.rating === 0
+                !newLog.solution || !newLog.outcome
               }
               className={`font-bold ${
-                newLog.solution && newLog.outcome && newLog.rating > 0
+                newLog.solution && newLog.outcome
                   ? "text-white"
                   : "text-primary-200"
               }`}
@@ -185,15 +122,6 @@ export default function Tracking() {
               className="input h-32 resize-none"
             />
           </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-primary-500 mb-2">
-              {t("effectivenessRating")}
-            </label>
-            {renderStars(newLog.rating, (star) =>
-              setNewLog({ ...newLog, rating: star }),
-            )}
-          </div>
         </div>
       </div>
     );
@@ -214,26 +142,12 @@ export default function Tracking() {
       <div className="max-w-2xl mx-auto p-4 space-y-6">
         {/* Stats */}
         <div className="card">
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div>
-              <div className="text-2xl font-bold text-primary-500">
+          <div className="flex justify-center">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-primary-500">
                 {logs.length}
               </div>
               <div className="text-sm text-gray-600">{t("totalLogs")}</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-primary-500">
-                {(
-                  logs.reduce((sum, log) => sum + log.rating, 0) / logs.length
-                ).toFixed(1)}
-              </div>
-              <div className="text-sm text-gray-600">{t("avgRating")}</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-primary-500">
-                {logs.filter((log) => log.rating >= 4).length}
-              </div>
-              <div className="text-sm text-gray-600">{t("successful")}</div>
             </div>
           </div>
         </div>
@@ -253,10 +167,7 @@ export default function Tracking() {
             {t("yourLogs")}
           </h2>
           <div className="space-y-4">
-            {logs.map((log) => {
-              const effectiveness = getEffectivenessLabel(log.rating);
-              const EffectivenessIcon = effectiveness.icon;
-
+            {logs.map((log, index) => {
               return (
                 <div key={log.id} className="card">
                   {/* Log Header */}
@@ -273,6 +184,12 @@ export default function Tracking() {
                           { month: "short", day: "numeric", year: "numeric" },
                         )}
                       </span>
+                      {/* Sample Badge */}
+                      {index === logs.length - 1 && (
+                        <span className="bg-secondary-500 text-white px-2 py-0.5 rounded text-xs font-semibold ml-2">
+                          Sample
+                        </span>
+                      )}
                     </div>
                     <span className="bg-primary-100 text-primary-500 px-2 py-1 rounded text-xs font-semibold">
                       {t(log.crop)}
@@ -285,32 +202,7 @@ export default function Tracking() {
                   </h3>
 
                   {/* Outcome */}
-                  <p className="text-gray-700 text-sm mb-4">{t(log.outcome)}</p>
-
-                  {/* Rating and Effectiveness */}
-                  <div className="border-t border-gray-100 pt-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-xs text-gray-500 mb-1">
-                          {t("effectiveness")}
-                        </p>
-                        {renderStars(log.rating)}
-                      </div>
-                      <div
-                        className={`flex items-center gap-2 px-3 py-1 rounded-full ${effectiveness.bg}`}
-                      >
-                        <EffectivenessIcon
-                          size={14}
-                          className={effectiveness.color}
-                        />
-                        <span
-                          className={`text-xs font-semibold ${effectiveness.color}`}
-                        >
-                          {effectiveness.label}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                  <p className="text-gray-700 text-sm">{t(log.outcome)}</p>
                 </div>
               );
             })}

@@ -39,13 +39,13 @@ export default function Plan({
     {
       id: "farmer-scope",
       icon: Telescope,
-      title: "Farmer Scope",
+      title: "Farmscope",
       subtitle: "Analyze and optimize your farm's potential",
       description: "Get comprehensive insights about your farm performance and growth opportunities",
       color: "bg-gradient-to-br from-teal-500 via-emerald-500 to-green-500",
       isAvailable: true,
     },
-    {
+    { 
       id: "calendar",
       icon: Calendar,
       title: t("advisoryCalendar"),
@@ -115,7 +115,7 @@ export default function Plan({
                 </div>
               </div>
               <h3 className="text-2xl font-bold mb-2">
-                Farmer Scope
+                Farmscope
               </h3>
               <p className="text-orange-100 mb-4">
                 Analyze and optimize your farm's potential
@@ -190,7 +190,7 @@ export default function Plan({
             <Sparkles size={20} /> Planning Tip
           </h3>
           <p className="text-primary-800 text-sm">
-            Use Farmer Scope to get comprehensive insights about your farm's performance and discover growth opportunities.
+            Use Farmscope to get comprehensive insights about your farm's performance and discover growth opportunities.
           </p>
         </div>
       </div>

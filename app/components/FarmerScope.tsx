@@ -79,7 +79,7 @@ export default function FarmerScope({ onBack, isActive }: FarmerScopeProps) {
           </button>
           <div className="flex items-center gap-3 mb-2">
             <Telescope size={32} />
-            <h1 className="text-2xl sm:text-3xl font-bold">Farmer Scope</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold">FarmScope</h1>
           </div>
           <p className="text-teal-100 text-sm sm:text-base">
             Farm advisories and insights for sustainable agriculture
