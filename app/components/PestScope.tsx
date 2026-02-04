@@ -14,11 +14,19 @@ import {
 interface PestAdvisory {
   id: string;
   title: string;
-  date: string;
+  image: string | null;
   excerpt: string;
+  author: string | null;
+  date: string | null;
+  category: string | null;
   link: string;
-  category: string;
-  author?: string;
+}
+
+interface PestCategory {
+  name: string;
+  slug: string;
+  url: string;
+  image: string | null;
 }
 
 interface PestScopeProps {
@@ -28,7 +36,9 @@ interface PestScopeProps {
 
 export default function PestScope({ onBack, isActive }: PestScopeProps) {
   const [advisories, setAdvisories] = useState<PestAdvisory[]>([]);
+  const [categories, setCategories] = useState<PestCategory[]>([]);
   const [loading, setLoading] = useState(true);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -40,8 +50,24 @@ export default function PestScope({ onBack, isActive }: PestScopeProps) {
   }, [isActive]);
 
   useEffect(() => {
+    fetchCategories();
     fetchAdvisories();
   }, []);
+
+  const fetchCategories = async () => {
+    setCategoriesLoading(true);
+    try {
+      const response = await fetch('/api/pest-scope/categories');
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        setCategories(data);
+      }
+    } catch (err) {
+      console.error('Error fetching categories:', err);
+    } finally {
+      setCategoriesLoading(false);
+    }
+  };
 
   const fetchAdvisories = async () => {
     setLoading(true);
@@ -51,8 +77,8 @@ export default function PestScope({ onBack, isActive }: PestScopeProps) {
       const response = await fetch('/api/pest-scope');
       const data = await response.json();
 
-      if (data.success) {
-        setAdvisories(data.advisories);
+      if (data.success && data.data) {
+        setAdvisories(data.data);
       } else {
         setError('Failed to load pest advisories');
       }
@@ -92,6 +118,57 @@ export default function PestScope({ onBack, isActive }: PestScopeProps) {
 
       {/* Main Content */}
       <div className="max-w-2xl mx-auto p-4">
+        {/* Categories Section */}
+        <div className="mb-6">
+          <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <Bug size={20} className="text-emerald-600" />
+            Crop Categories
+          </h2>
+          
+          {categoriesLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 size={32} className="text-emerald-600 animate-spin" />
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {categories.map((category) => (
+                <a
+                  key={category.slug}
+                  href={category.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 border border-gray-200 hover:border-emerald-400"
+                >
+                  {/* Image */}
+                  {category.image ? (
+                    <div className="aspect-square overflow-hidden bg-gray-100">
+                      <img
+                        src={category.image}
+                        alt={category.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                    </div>
+                  ) : (
+                    <div className="aspect-square bg-gradient-to-br from-emerald-100 to-green-100 flex items-center justify-center">
+                      <Bug size={40} className="text-emerald-600" />
+                    </div>
+                  )}
+                  
+                  {/* Category Name */}
+                  <div className="p-2 bg-white">
+                    <h3 className="text-xs sm:text-sm font-semibold text-gray-800 line-clamp-2 text-center group-hover:text-emerald-600 transition-colors">
+                      {category.name}
+                    </h3>
+                  </div>
+                  
+                  {/* Hover Overlay */}
+                  <div className="absolute inset-0 bg-emerald-600/0 group-hover:bg-emerald-600/10 transition-all duration-200 pointer-events-none" />
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+
         {/* Refresh Button */}
         <div className="flex justify-end mb-4">
           <button
