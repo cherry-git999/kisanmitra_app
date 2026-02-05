@@ -27,16 +27,7 @@ interface PestCategory {
   slug: string;
   url: string;
   image: string | null;
-}
-
-interface PestItem {
-  id: string;
-  title: string;
-  slug: string;
-  image: string | null;
-  excerpt: string;
-  price: string | null;
-  url: string;
+  pests: PestItem[];
 }
 
 interface PestDetail {
@@ -54,6 +45,17 @@ interface PestDetail {
   url: string;
 }
 
+interface PestItem {
+  id: string;
+  title: string;
+  slug: string;
+  image: string | null;
+  excerpt: string;
+  price: string | null;
+  url: string;
+  detail: PestDetail | null;
+}
+
 interface PestScopeProps {
   onBack: () => void;
   isActive?: boolean;
@@ -63,13 +65,9 @@ export default function PestScope({ onBack, isActive }: PestScopeProps) {
   const [advisories, setAdvisories] = useState<PestAdvisory[]>([]);
   const [categories, setCategories] = useState<PestCategory[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<PestCategory | null>(null);
-  const [pests, setPests] = useState<PestItem[]>([]);
   const [selectedPest, setSelectedPest] = useState<PestItem | null>(null);
-  const [pestDetail, setPestDetail] = useState<PestDetail | null>(null);
   const [loading, setLoading] = useState(true);
-  const [categoriesLoading, setCategoriesLoading] = useState(true);
-  const [pestsLoading, setPestsLoading] = useState(false);
-  const [pestDetailLoading, setPestDetailLoading] = useState(false);
+  const [dataLoading, setDataLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -81,61 +79,34 @@ export default function PestScope({ onBack, isActive }: PestScopeProps) {
   }, [isActive]);
 
   useEffect(() => {
-    fetchCategories();
+    loadPestData();
     fetchAdvisories();
   }, []);
 
-  const fetchCategories = async () => {
-    setCategoriesLoading(true);
+  const loadPestData = async () => {
+    setDataLoading(true);
     try {
-      const response = await fetch('/api/pest-scope/categories');
+      const response = await fetch('/data/pest-data.json');
       const data = await response.json();
-      if (Array.isArray(data)) {
-        setCategories(data);
+      if (data.categories && Array.isArray(data.categories)) {
+        setCategories(data.categories);
       }
     } catch (err) {
-      console.error('Error fetching categories:', err);
+      console.error('Error loading pest data:', err);
     } finally {
-      setCategoriesLoading(false);
+      setDataLoading(false);
     }
   };
 
-  const fetchCategoryPests = async (category: PestCategory) => {
-    setPestsLoading(true);
+  const handleCategoryClick = (e: React.MouseEvent, category: PestCategory) => {
+    e.preventDefault();
     setSelectedCategory(category);
-    setPests([]);
-    
-    try {
-      const response = await fetch(`/api/pest-scope/category/${category.slug}`);
-      const data = await response.json();
-      
-      if (data.success && data.data) {
-        setPests(data.data);
-      }
-    } catch (err) {
-      console.error('Error fetching category pests:', err);
-    } finally {
-      setPestsLoading(false);
-    }
+    setSelectedPest(null);
   };
 
-  const fetchPestDetails = async (pest: PestItem) => {
-    setPestDetailLoading(true);
+  const handlePestClick = (e: React.MouseEvent, pest: PestItem) => {
+    e.preventDefault();
     setSelectedPest(pest);
-    setPestDetail(null);
-    
-    try {
-      const response = await fetch(`/api/pest-scope/pest/${pest.slug}?url=${encodeURIComponent(pest.url)}`);
-      const data = await response.json();
-      
-      if (data.success && data.data) {
-        setPestDetail(data.data);
-      }
-    } catch (err) {
-      console.error('Error fetching pest details:', err);
-    } finally {
-      setPestDetailLoading(false);
-    }
   };
 
   const fetchAdvisories = async () => {
@@ -163,26 +134,13 @@ export default function PestScope({ onBack, isActive }: PestScopeProps) {
     fetchAdvisories();
   };
 
-  const handleCategoryClick = (e: React.MouseEvent, category: PestCategory) => {
-    e.preventDefault();
-    fetchCategoryPests(category);
-  };
-
   const handleBackToCategories = () => {
     setSelectedCategory(null);
     setSelectedPest(null);
-    setPests([]);
-    setPestDetail(null);
   };
 
   const handleBackToPests = () => {
     setSelectedPest(null);
-    setPestDetail(null);
-  };
-
-  const handlePestClick = (e: React.MouseEvent, pest: PestItem) => {
-    e.preventDefault();
-    fetchPestDetails(pest);
   };
 
   return (
@@ -210,7 +168,7 @@ export default function PestScope({ onBack, isActive }: PestScopeProps) {
       {/* Main Content */}
       <div className="max-w-2xl mx-auto p-4">
         {/* Show Categories, Pests, or Pest Details */}
-        {selectedPest && pestDetail ? (
+        {selectedPest && selectedPest.detail ? (
           /* Individual Pest Detail Section */
           <div className="mb-6">
             <button
@@ -222,18 +180,18 @@ export default function PestScope({ onBack, isActive }: PestScopeProps) {
             </button>
             
             <h2 className="text-xl font-bold text-gray-900 mb-4">
-              {pestDetail.title}
+              {selectedPest.detail.title}
             </h2>
 
             {/* Images Gallery */}
-            {pestDetail.images.length > 0 && (
+            {selectedPest.detail.images.length > 0 && (
               <div className="mb-6">
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {pestDetail.images.map((image, idx) => (
+                  {selectedPest.detail.images.map((image, idx) => (
                     <div key={idx} className="aspect-square rounded-lg overflow-hidden bg-gray-100 shadow-md">
                       <img
                         src={image}
-                        alt={`${pestDetail.title} - Image ${idx + 1}`}
+                        alt={`${selectedPest.detail!.title} - Image ${idx + 1}`}
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                       />
                     </div>
@@ -244,73 +202,68 @@ export default function PestScope({ onBack, isActive }: PestScopeProps) {
 
             {/* Structured Content */}
             <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-200 space-y-4">
-              {pestDetail.causedBy && (
+              {selectedPest.detail.causedBy && (
                 <div>
                   <h3 className="font-bold text-gray-900 mb-1">Caused by:</h3>
-                  <p className="text-gray-700 text-sm">{pestDetail.causedBy}</p>
+                  <p className="text-gray-700 text-sm">{selectedPest.detail.causedBy}</p>
                 </div>
               )}
 
-              {pestDetail.problemCategory && (
+              {selectedPest.detail.problemCategory && (
                 <div>
                   <h3 className="font-bold text-gray-900 mb-1">Problem Category:</h3>
-                  <p className="text-gray-700 text-sm">{pestDetail.problemCategory}</p>
+                  <p className="text-gray-700 text-sm">{selectedPest.detail.problemCategory}</p>
                 </div>
               )}
 
-              {pestDetail.symptoms && (
+              {selectedPest.detail.symptoms && (
                 <div>
                   <h3 className="font-bold text-red-900 mb-1 flex items-center gap-2">
                     <AlertCircle size={16} />
                     Symptoms:
                   </h3>
-                  <p className="text-gray-700 text-sm leading-relaxed">{pestDetail.symptoms}</p>
+                  <p className="text-gray-700 text-sm leading-relaxed">{selectedPest.detail.symptoms}</p>
                 </div>
               )}
 
-              {pestDetail.comments && (
+              {selectedPest.detail.comments && (
                 <div>
                   <h3 className="font-bold text-gray-900 mb-1">Comments:</h3>
-                  <p className="text-gray-700 text-sm leading-relaxed">{pestDetail.comments}</p>
+                  <p className="text-gray-700 text-sm leading-relaxed">{selectedPest.detail.comments}</p>
                 </div>
               )}
 
-              {pestDetail.management && (
+              {selectedPest.detail.management && (
                 <div>
                   <h3 className="font-bold text-green-900 mb-1 flex items-center gap-2">
                     <Bug size={16} />
                     Management:
                   </h3>
-                  <p className="text-gray-700 text-sm leading-relaxed">{pestDetail.management}</p>
+                  <p className="text-gray-700 text-sm leading-relaxed">{selectedPest.detail.management}</p>
                 </div>
               )}
 
-              {pestDetail.control && (
+              {selectedPest.detail.control && (
                 <div>
                   <h3 className="font-bold text-green-900 mb-1">Control:</h3>
-                  <p className="text-gray-700 text-sm leading-relaxed">{pestDetail.control}</p>
+                  <p className="text-gray-700 text-sm leading-relaxed">{selectedPest.detail.control}</p>
                 </div>
               )}
 
-              {pestDetail.sku && (
+              {selectedPest.detail.sku && (
                 <div>
                   <h3 className="font-bold text-gray-900 mb-1">SKU:</h3>
-                  <p className="text-gray-700 text-sm">{pestDetail.sku}</p>
+                  <p className="text-gray-700 text-sm">{selectedPest.detail.sku}</p>
                 </div>
               )}
 
-              {pestDetail.category && (
+              {selectedPest.detail.category && (
                 <div>
                   <h3 className="font-bold text-gray-900 mb-1">Category:</h3>
-                  <p className="text-gray-700 text-sm">{pestDetail.category}</p>
+                  <p className="text-gray-700 text-sm">{selectedPest.detail.category}</p>
                 </div>
               )}
             </div>
-          </div>
-        ) : selectedPest && pestDetailLoading ? (
-          /* Loading Pest Details */
-          <div className="flex items-center justify-center py-12">
-            <Loader2 size={48} className="text-emerald-600 animate-spin" />
           </div>
         ) : !selectedCategory ? (
           /* Categories Section */
@@ -320,7 +273,7 @@ export default function PestScope({ onBack, isActive }: PestScopeProps) {
               Crop Categories
             </h2>
             
-            {categoriesLoading ? (
+            {dataLoading ? (
               <div className="flex items-center justify-center py-8">
                 <Loader2 size={32} className="text-emerald-600 animate-spin" />
               </div>
@@ -377,13 +330,9 @@ export default function PestScope({ onBack, isActive }: PestScopeProps) {
               {selectedCategory.name} - Pests & Diseases
             </h2>
             
-            {pestsLoading ? (
-              <div className="flex items-center justify-center py-8">
-                <Loader2 size={32} className="text-emerald-600 animate-spin" />
-              </div>
-            ) : pests.length > 0 ? (
+            {selectedCategory.pests.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {pests.map((pest) => (
+                {selectedCategory.pests.map((pest) => (
                   <button
                     key={pest.id}
                     onClick={(e) => handlePestClick(e, pest)}
