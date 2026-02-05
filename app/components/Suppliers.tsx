@@ -1,48 +1,39 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { MapPin, Phone, Mail, Package } from "lucide-react";
 import { useI18n } from "../i18n";
 
-const mockSuppliers = [
-  {
-    id: 1,
-    name: "Greenfield Organics & Naturals",
-    phone: "+91 9143336662",
-    email: "info@greenvalley.com",
-    address:
-      "Greenfield Organics & Naturals,Peda Waltair Opposite Three Town Police Station, Visakhapatnam, Andhra Pradesh 530017",
-    distance: "750 m",
-    products: ["Seeds", "Fertilizers", "Tools", "Neem Oil"],
-  },
-  {
-    id: 3,
-    name: "Satyasai Agri Centre",
-    phone: "+91 98765 43212",
-    email: "sales@organicsolutions.in",
-    address:
-      "Satyasai Agri Centre,30-12-10, Ranga St, Daba Gardens, Allipuram, Visakhapatnam, Andhra Pradesh 530020",
-    distance: "3.4 km",
-    products: ["Fertilizers", "Pest Control", "Soil Testing"],
-  },
-  {
-    id: 2,
-    name: "Avani Organics",
-    phone: "+91 7799770328",
-    email: "contact@naturalfarms.com",
-    address:
-      "Avani Organics, Mvp Sector 7, MVP Colony, Visakhapatnam, Andhra Pradesh 530022",
-    distance: "3.6 km",
-    products: ["Compost", "Bio-Pesticides", "Seeds", "Equipment"],
-  },
-];
+interface Supplier {
+  id: number;
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+  distance: string;
+  products: string[];
+}
 
 export default function Suppliers() {
   const { t } = useI18n();
+  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Reset scroll position when component mounts
+  // Reset scroll position and fetch suppliers data when component mounts
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
+
+    // Fetch suppliers data from JSON file
+    fetch('/data/suppliers-data.json')
+      .then(response => response.json())
+      .then(data => {
+        setSuppliers(data.suppliers);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error loading suppliers data:', error);
+        setLoading(false);
+      });
   }, []);
 
   const handleCall = (phone: string) => {
@@ -82,7 +73,16 @@ export default function Suppliers() {
 
         {/* Suppliers List */}
         <div className="space-y-4">
-          {mockSuppliers.map((supplier) => (
+          {loading ? (
+            <div className="text-center py-8">
+              <p className="text-gray-600">{t("loading")}</p>
+            </div>
+          ) : suppliers.length === 0 ? (
+            <div className="card text-center">
+              <p className="text-gray-600">{t("noSuppliersFound")}</p>
+            </div>
+          ) : (
+            suppliers.map((supplier) => (
             <div key={supplier.id} className="card">
               {/* Supplier Header */}
               <div className="flex justify-between items-start mb-4">
@@ -146,7 +146,8 @@ export default function Suppliers() {
                 </button>
               </div>
             </div>
-          ))}
+            ))
+          )}
         </div>
 
         {/* Bottom Info */}

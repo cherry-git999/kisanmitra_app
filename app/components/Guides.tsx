@@ -9,127 +9,28 @@ import {
   Search,
 } from "lucide-react";
 
-const mockGuides = [
-  {
-    id: 2,
-    titleKey: "panchagavyaTitle",
-    categoryKey: "seedTreatment",
-    difficultyKey: "easy",
-    descriptionKey: "panchagavyaDesc",
-    steps: 7,
-  },
-  {
-    id: 1,
-    titleKey: "neemOilTitle",
-    categoryKey: "organicSprays",
-    difficultyKey: "easy",
-    descriptionKey: "neemOilDesc",
-    steps: 5,
-  },
-  {
-    id: 6,
-    titleKey: "beejamruthaTitle",
-    categoryKey: "seedTreatment",
-    difficultyKey: "medium",
-    descriptionKey: "beejamruthaDesc",
-    steps: 7,
-  },
-  {
-    id: 7,
-    titleKey: "trichodermaTitle",
-    categoryKey: "seedTreatment",
-    difficultyKey: "medium",
-    descriptionKey: "trichodermaDesc",
-    steps: 7,
-  },
-  {
-    id: 5,
-    titleKey: "garlicChilliTitle",
-    categoryKey: "organicSprays",
-    difficultyKey: "medium",
-    descriptionKey: "garlicChilliDesc",
-    steps: 5,
-  },
-  {
-    id: 8,
-    titleKey: "cropRotationTitle",
-    categoryKey: "soilTreatment",
-    difficultyKey: "easy",
-    descriptionKey: "cropRotationDesc",
-    steps: 4,
-  },
-  {
-    id: 3,
-    titleKey: "manureTitle",
-    categoryKey: "soilTreatment",
-    difficultyKey: "easy",
-    descriptionKey: "manureDesc",
-    steps: 4,
-  },
-  {
-    id: 9,
-    titleKey: "compostTitle",
-    categoryKey: "soilTreatment",
-    difficultyKey: "easy",
-    descriptionKey: "compostDesc",
-    steps: 4,
-  },
-  {
-    id: 4,
-    titleKey: "garlicChilliTitle",
-    categoryKey: "organicSprays",
-    difficultyKey: "medium",
-    descriptionKey: "garlicChilliDesc",
-    steps: 5,
-  },
-];
+interface Guide {
+  id: number;
+  titleKey: string;
+  categoryKey: string;
+  difficultyKey: string;
+  descriptionKey: string;
+  steps: number;
+}
 
-const mockGuideDetails = {
-  titleKey: "panchagavyaTitle",
-  descriptionKey: "neemOilDesc",
-  steps: [
-    {
-      number: 1,
-      titleKey: "ingredientsLabel",
-      descriptionKey: "ingredientsDescription",
-      videoUrl:
-        "https://res.cloudinary.com/dzhicz6yl/video/upload/v1759858376/clip_1_bfpsn8.mp4",
-      hasAudio: true,
-    },
-    {
-      number: 2,
-      titleKey: "preparationLabel",
-      descriptionKey: "preparationDescription1",
-      videoUrl:
-        "https://res.cloudinary.com/dzhicz6yl/video/upload/v1759858384/clip_2_bcgthl.mp4",
-      hasAudio: true,
-    },
-    {
-      number: 3,
-      titleKey: "preparationLabel",
-      descriptionKey: "preparationDescription2",
-      videoUrl:
-        "https://res.cloudinary.com/dzhicz6yl/video/upload/v1759858386/clip_3_wgxsyv.mp4",
-      hasAudio: true,
-    },
-    {
-      number: 4,
-      titleKey: "preparationLabel",
-      descriptionKey: "preparationDescription3",
-      videoUrl:
-        "https://res.cloudinary.com/dzhicz6yl/video/upload/v1759858387/clip_4_tad7ex.mp4",
-      hasAudio: true,
-    },
-    {
-      number: 5,
-      titleKey: "applicationLabel",
-      descriptionKey: "applicationDescription",
-      videoUrl:
-        "https://res.cloudinary.com/dzhicz6yl/video/upload/v1759858390/clip_5_owu8jp.mp4",
-      hasAudio: true,
-    },
-  ],
-};
+interface GuideStep {
+  number: number;
+  titleKey: string;
+  descriptionKey: string;
+  videoUrl: string;
+  hasAudio: boolean;
+}
+
+interface GuideDetails {
+  titleKey: string;
+  descriptionKey: string;
+  steps: GuideStep[];
+}
 
 export default function Guides() {
   const { t } = useI18n();
@@ -137,12 +38,28 @@ export default function Guides() {
   const [playingAudio, setPlayingAudio] = useState<number | null>(null);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [guides, setGuides] = useState<Guide[]>([]);
+  const [guideDetails, setGuideDetails] = useState<GuideDetails | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Reset scroll position when component mounts
+  // Reset scroll position and fetch guides data when component mounts
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
+
+    // Fetch guides data from JSON file
+    fetch('/data/guides-data.json')
+      .then(response => response.json())
+      .then(data => {
+        setGuides(data.guides);
+        setGuideDetails(data.guideDetails);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error loading guides data:', error);
+        setLoading(false);
+      });
   }, []);
 
   const categories = [
@@ -157,7 +74,7 @@ export default function Guides() {
     setPlayingAudio(playingAudio === stepNumber ? null : stepNumber);
   };
 
-  const filteredGuides = mockGuides.filter((guide) => {
+  const filteredGuides = guides.filter((guide) => {
     const guideTitle = t(guide.titleKey).toLowerCase();
     const guideDesc = t(guide.descriptionKey).toLowerCase();
     const matchesCategory =
@@ -190,23 +107,25 @@ export default function Guides() {
 
         <div className="max-w-2xl mx-auto">
           {/* Guide Title */}
-          <div className="card m-4">
-            <h1 className="text-2xl font-bold text-primary-500 mb-2">
-              {t(mockGuideDetails.titleKey)}
-            </h1>
-            <p className="text-gray-600 mb-4">{t("panchagavyaDesc")}</p>
-            <div className="flex items-center gap-4 text-sm text-secondary-500">
-              <span>
-                {mockGuideDetails.steps.length} {t("stepsSuffix")}
-              </span>
-              <span>•</span>
-              <span>20 Days</span>
-            </div>
-          </div>
+          {guideDetails && (
+            <>
+              <div className="card m-4">
+                <h1 className="text-2xl font-bold text-primary-500 mb-2">
+                  {t(guideDetails.titleKey)}
+                </h1>
+                <p className="text-gray-600 mb-4">{t("panchagavyaDesc")}</p>
+                <div className="flex items-center gap-4 text-sm text-secondary-500">
+                  <span>
+                    {guideDetails.steps.length} {t("stepsSuffix")}
+                  </span>
+                  <span>•</span>
+                  <span>20 Days</span>
+                </div>
+              </div>
 
-          {/* Steps */}
-          <div className="px-4 space-y-4">
-            {mockGuideDetails.steps.map((step) => (
+              {/* Steps */}
+              <div className="px-4 space-y-4">
+                {guideDetails.steps.map((step) => (
               <div key={step.number} className="card">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-primary-500 text-white rounded-full flex items-center justify-center font-bold">
@@ -227,8 +146,10 @@ export default function Guides() {
 
                 <p className="text-gray-700 mb-4">{t(step.descriptionKey)}</p>
               </div>
-            ))}
-          </div>
+                ))}
+              </div>
+            </>
+          )}
 
           {/* Completion Message */}
           <div className="m-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
@@ -304,7 +225,11 @@ export default function Guides() {
           <h2 className="text-lg font-bold text-primary-500 mb-3">
             {t("popularGuides")}
           </h2>
-          {filteredGuides.length > 0 ? (
+          {loading ? (
+            <div className="text-center py-8">
+              <p className="text-gray-600">{t("loading")}</p>
+            </div>
+          ) : filteredGuides.length > 0 ? (
             filteredGuides.map((guide) => (
               <button
                 key={guide.id}

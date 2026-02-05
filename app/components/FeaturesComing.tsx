@@ -130,11 +130,18 @@ export default function FeaturesComing({
                 <span className="font-semibold">Start chatting →</span>
               </div>
             </div>
-            <div className="absolute top-4 right-4">
+            <div className="absolute top-4 right-4 flex flex-col gap-2">
               <div className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
                 <Lock size={12} />
                 Coming Soon
               </div>
+              <button
+                onClick={() => onFeatureSelect("chatbot")}
+                className="bg-white text-green-600 px-3 py-1 rounded-full text-xs font-bold hover:bg-green-50 transition-colors flex items-center gap-1 shadow-md"
+              >
+                <Sparkles size={12} />
+                Try Sample
+              </button>
             </div>
           </div>
         </div>
@@ -158,11 +165,18 @@ export default function FeaturesComing({
                 <span className="font-semibold">Try it now →</span>
               </div>
             </div>
-            <div className="absolute top-4 right-4">
+            <div className="absolute top-4 right-4 flex flex-col gap-2">
               <div className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
                 <Lock size={12} />
                 Coming Soon
               </div>
+              <button
+                onClick={() => onFeatureSelect("photo")}
+                className="bg-white text-green-600 px-3 py-1 rounded-full text-xs font-bold hover:bg-green-50 transition-colors flex items-center gap-1 shadow-md"
+              >
+                <Sparkles size={12} />
+                Try Sample
+              </button>
             </div>
           </div>
         </div>

@@ -1,0 +1,31 @@
+{
+  "suppliers": [
+    {
+      "id": 1,
+      "name": "Greenfield Organics & Naturals",
+      "phone": "+91 9143336662",
+      "email": "info@greenvalley.com",
+      "address": "Greenfield Organics & Naturals,Peda Waltair Opposite Three Town Police Station, Visakhapatnam, Andhra Pradesh 530017",
+      "distance": "750 m",
+      "products": ["Seeds", "Fertilizers", "Tools", "Neem Oil"]
+    },
+    {
+      "id": 3,
+      "name": "Satyasai Agri Centre",
+      "phone": "+91 98765 43212",
+      "email": "sales@organicsolutions.in",
+      "address": "Satyasai Agri Centre,30-12-10, Ranga St, Daba Gardens, Allipuram, Visakhapatnam, Andhra Pradesh 530020",
+      "distance": "3.4 km",
+      "products": ["Fertilizers", "Pest Control", "Soil Testing"]
+    },
+    {
+      "id": 2,
+      "name": "Avani Organics",
+      "phone": "+91 7799770328",
+      "email": "contact@naturalfarms.com",
+      "address": "Avani Organics, Mvp Sector 7, MVP Colony, Visakhapatnam, Andhra Pradesh 530022",
+      "distance": "3.6 km",
+      "products": ["Compost", "Bio-Pesticides", "Seeds", "Equipment"]
+    }
+  ]
+}

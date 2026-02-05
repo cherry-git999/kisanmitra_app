@@ -1,0 +1,117 @@
+{
+  "guides": [
+    {
+      "id": 2,
+      "titleKey": "panchagavyaTitle",
+      "categoryKey": "seedTreatment",
+      "difficultyKey": "easy",
+      "descriptionKey": "panchagavyaDesc",
+      "steps": 7
+    },
+    {
+      "id": 1,
+      "titleKey": "neemOilTitle",
+      "categoryKey": "organicSprays",
+      "difficultyKey": "easy",
+      "descriptionKey": "neemOilDesc",
+      "steps": 5
+    },
+    {
+      "id": 6,
+      "titleKey": "beejamruthaTitle",
+      "categoryKey": "seedTreatment",
+      "difficultyKey": "medium",
+      "descriptionKey": "beejamruthaDesc",
+      "steps": 7
+    },
+    {
+      "id": 7,
+      "titleKey": "trichodermaTitle",
+      "categoryKey": "seedTreatment",
+      "difficultyKey": "medium",
+      "descriptionKey": "trichodermaDesc",
+      "steps": 7
+    },
+    {
+      "id": 5,
+      "titleKey": "garlicChilliTitle",
+      "categoryKey": "organicSprays",
+      "difficultyKey": "medium",
+      "descriptionKey": "garlicChilliDesc",
+      "steps": 5
+    },
+    {
+      "id": 8,
+      "titleKey": "cropRotationTitle",
+      "categoryKey": "soilTreatment",
+      "difficultyKey": "easy",
+      "descriptionKey": "cropRotationDesc",
+      "steps": 4
+    },
+    {
+      "id": 3,
+      "titleKey": "manureTitle",
+      "categoryKey": "soilTreatment",
+      "difficultyKey": "easy",
+      "descriptionKey": "manureDesc",
+      "steps": 4
+    },
+    {
+      "id": 9,
+      "titleKey": "compostTitle",
+      "categoryKey": "soilTreatment",
+      "difficultyKey": "easy",
+      "descriptionKey": "compostDesc",
+      "steps": 4
+    },
+    {
+      "id": 4,
+      "titleKey": "garlicChilliTitle",
+      "categoryKey": "organicSprays",
+      "difficultyKey": "medium",
+      "descriptionKey": "garlicChilliDesc",
+      "steps": 5
+    }
+  ],
+  "guideDetails": {
+    "titleKey": "panchagavyaTitle",
+    "descriptionKey": "neemOilDesc",
+    "steps": [
+      {
+        "number": 1,
+        "titleKey": "ingredientsLabel",
+        "descriptionKey": "ingredientsDescription",
+        "videoUrl": "https://res.cloudinary.com/dzhicz6yl/video/upload/v1759858376/clip_1_bfpsn8.mp4",
+        "hasAudio": true
+      },
+      {
+        "number": 2,
+        "titleKey": "preparationLabel",
+        "descriptionKey": "preparationDescription1",
+        "videoUrl": "https://res.cloudinary.com/dzhicz6yl/video/upload/v1759858384/clip_2_bcgthl.mp4",
+        "hasAudio": true
+      },
+      {
+        "number": 3,
+        "titleKey": "preparationLabel",
+        "descriptionKey": "preparationDescription2",
+        "videoUrl": "https://res.cloudinary.com/dzhicz6yl/video/upload/v1759858386/clip_3_wgxsyv.mp4",
+        "hasAudio": true
+      },
+      {
+        "number": 4,
+        "titleKey": "preparationLabel",
+        "descriptionKey": "preparationDescription3",
+        "videoUrl": "https://res.cloudinary.com/dzhicz6yl/video/upload/v1759858387/clip_4_tad7ex.mp4",
+        "hasAudio": true
+      },
+      {
+        "number": 5,
+        "titleKey": "applicationLabel",
+        "descriptionKey": "applicationDescription",
+        "videoUrl": "https://res.cloudinary.com/dzhicz6yl/video/upload/v1759858390/clip_5_owu8jp.mp4",
+        "hasAudio": true
+      }
+    ]
+  }
+}

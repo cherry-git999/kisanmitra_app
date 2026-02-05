@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   BookOpen,
   ScanLine,
@@ -9,6 +9,9 @@ import {
   Sparkles,
   Lock,
   Microscope,
+  X,
+  Database,
+  Radio,
 } from "lucide-react";
 import { useI18n } from "../i18n";
 
@@ -24,6 +27,7 @@ export default function Grow({
   isActive,
 }: GrowProps) {
   const { t, language } = useI18n();
+  const [showPestScopeDialog, setShowPestScopeDialog] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -112,7 +116,7 @@ export default function Grow({
         {/* Featured - Pest Scope */}
         <div className="mb-6">
           <button
-            onClick={() => onFeatureSelect("pest-scope")}
+            onClick={() => setShowPestScopeDialog(true)}
             className="w-full relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95"
           >
             <div className="bg-gradient-to-br from-emerald-500 via-green-500 to-lime-500 p-6 text-white shadow-xl">
@@ -204,6 +208,82 @@ export default function Grow({
           </p>
         </div>
       </div>
+
+      {/* PestScope Selection Dialog */}
+      {showPestScopeDialog && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full relative animate-in fade-in zoom-in duration-300">
+            {/* Close Button */}
+            <button
+              onClick={() => setShowPestScopeDialog(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <X size={24} />
+            </button>
+
+            {/* Header */}
+            <div className="bg-gradient-to-br from-emerald-500 via-green-500 to-lime-500 text-white p-6 rounded-t-2xl">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-12 h-12 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
+                  <Microscope size={28} className="text-white" />
+                </div>
+                <h2 className="text-2xl font-bold">Pestoscope</h2>
+              </div>
+              <p className="text-green-50 text-sm">
+                Choose how you want to access pest information
+              </p>
+            </div>
+
+            {/* Options */}
+            <div className="p-6 space-y-4">
+              {/* Real-time Advisories - Coming Soon */}
+              <button
+                disabled
+                className="w-full p-4 border-2 border-gray-300 rounded-xl bg-gray-50 opacity-60 cursor-not-allowed"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Radio size={24} className="text-gray-400" />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="font-bold text-gray-500">Real-time Advisories</h3>
+                      <span className="bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full text-xs font-semibold">
+                        Coming Soon
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-400">
+                      Get instant alerts and real-time pest advisories for your location
+                    </p>
+                  </div>
+                </div>
+              </button>
+
+              {/* Knowledge Base - Active */}
+              <button
+                onClick={() => {
+                  setShowPestScopeDialog(false);
+                  onFeatureSelect("pest-scope");
+                }}
+                className="w-full p-4 border-2 border-emerald-500 rounded-xl bg-gradient-to-br from-emerald-50 to-green-50 hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-200"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Database size={24} className="text-white" />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <h3 className="font-bold text-emerald-700 mb-1">Knowledge Base</h3>
+                    <p className="text-sm text-emerald-600">
+                      Browse comprehensive pest database and management solutions
+                    </p>
+                  </div>
+                  <ArrowRight size={20} className="text-emerald-500 flex-shrink-0 mt-1" />
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
