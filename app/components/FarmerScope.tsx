@@ -7,15 +7,20 @@ import {
   AlertCircle,
   Telescope,
   RefreshCw,
+  User,
 } from "lucide-react";
 
 interface Advisory {
   id: string;
   title: string;
-  date: string;
+  image: string | null;
   excerpt: string;
+  author: string | null;
+  date: string | null;
+  category: string | null;
   link: string;
-  category: string;
+  fullContent?: string;
+  images?: string[];
 }
 
 interface FarmerScopeProps {
@@ -37,32 +42,32 @@ export default function FarmerScope({ onBack, isActive }: FarmerScopeProps) {
   }, [isActive]);
 
   useEffect(() => {
-    fetchAdvisories();
+    loadAdvisories();
   }, []);
 
-  const fetchAdvisories = async () => {
+  const loadAdvisories = async () => {
     setLoading(true);
     setError(null);
     
     try {
-      const response = await fetch('/api/farmer-scope');
-      const data = await response.json();
-
-      if (data.success) {
-        setAdvisories(data.advisories);
-      } else {
-        setError('Failed to load farm advisories');
+      const response = await fetch('/data/farmerscope-advisories.json');
+      
+      if (!response.ok) {
+        throw new Error('Failed to load advisories data');
       }
+      
+      const data = await response.json();
+      setAdvisories(data.advisories || []);
     } catch (err) {
-      setError('Unable to fetch data. Please try again later.');
-      console.error('Error fetching advisories:', err);
+      setError('Unable to load farm advisories. Please try again later.');
+      console.error('Error loading advisories:', err);
     } finally {
       setLoading(false);
     }
   };
 
   const handleRefresh = () => {
-    fetchAdvisories();
+    loadAdvisories();
   };
 
   return (
@@ -136,44 +141,61 @@ export default function FarmerScope({ onBack, isActive }: FarmerScopeProps) {
             </h2>
             
             {advisories.map((advisory) => (
-              <a
+              <div
                 key={advisory.id}
-                href={advisory.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 p-5 border-l-4 border-teal-500"
+                className="block bg-white rounded-xl shadow-sm border border-gray-200"
               >
-                <div className="flex items-start justify-between gap-3 mb-2">
-                  <h3 className="font-semibold text-primary-800 text-base leading-tight flex-1">
-                    {advisory.title}
-                  </h3>
-                  <ExternalLink size={18} className="text-teal-600 flex-shrink-0 mt-1" />
-                </div>
-
-                {advisory.date && (
-                  <div className="flex items-center gap-2 text-xs text-gray-600 mb-3">
-                    <Calendar size={14} />
-                    <span>{advisory.date}</span>
+                {/* Advisory Images Gallery */}
+                {advisory.images && advisory.images.length > 0 && (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 p-4 bg-gray-50">
+                    {advisory.images.slice(0, 6).map((image, idx) => (
+                      <div key={idx} className="aspect-square overflow-hidden rounded-lg bg-gray-100">
+                        <img
+                          src={image}
+                          alt={`${advisory.title} - Image ${idx + 1}`}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                    ))}
                   </div>
                 )}
-
-                {advisory.category && (
-                  <div className="inline-block bg-teal-100 text-teal-700 px-3 py-1 rounded-full text-xs font-medium mb-3">
-                    {advisory.category}
+                
+                <div className="p-5">
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <h3 className="font-bold text-gray-900 text-lg leading-tight flex-1">
+                      {advisory.title}
+                    </h3>
                   </div>
-                )}
 
-                {advisory.excerpt && (
-                  <p className="text-sm text-gray-700 line-clamp-3 leading-relaxed">
-                    {advisory.excerpt}
-                  </p>
-                )}
+                  <div className="flex flex-wrap items-center gap-3 mb-4">
+                    {advisory.date && (
+                      <div className="flex items-center gap-2 text-xs text-gray-600">
+                        <Calendar size={14} />
+                        <span>{advisory.date}</span>
+                      </div>
+                    )}
+                    {advisory.author && (
+                      <div className="flex items-center gap-2 text-xs text-gray-600">
+                        <User size={14} />
+                        <span>{advisory.author}</span>
+                      </div>
+                    )}
+                    {advisory.category && (
+                      <div className="inline-flex items-center gap-1 bg-teal-100 text-teal-700 px-2 py-1 rounded-full text-xs font-medium">
+                        {advisory.category}
+                      </div>
+                    )}
+                  </div>
 
-                <div className="flex items-center gap-2 text-teal-600 font-medium text-sm mt-3">
-                  <span>Read Full Advisory</span>
-                  <ArrowLeft size={16} className="rotate-180" />
+                  {advisory.fullContent && (
+                    <div className="prose prose-sm max-w-none">
+                      <div className="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">
+                        {advisory.fullContent}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </a>
+              </div>
             ))}
           </div>
         )}

@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
-    "generate-pest-data": "node scripts/generate-pest-data.js"
+    "generate-pest-data": "node scripts/generate-pest-data.js",
+    "generate-farmerscope-data": "node scripts/generate-farmerscope-data.js"
   },
   "dependencies": {
     "cheerio": "^1.1.2",

@@ -22,7 +22,6 @@ export async function GET() {
   try {
     const targetUrl = 'https://pestoscope.com/category/pest-advisory/';
     
-    // Fetch HTML from Pestoscope
     const response = await fetch(targetUrl, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
@@ -38,24 +37,19 @@ export async function GET() {
     const $ = cheerio.load(html);
     const posts: PestPost[] = [];
 
-    // Parse articles - WordPress typically uses article.post or similar
     $('article, .post, .entry').each((index, element) => {
       if (posts.length >= 20) return;
 
       const $article = $(element);
 
-      // Extract title - try multiple selectors
       const $titleLink = $article.find('h2 a, h1 a, .entry-title a, a[rel="bookmark"]').first();
       const title = $titleLink.text().trim();
       const link = $titleLink.attr('href');
 
-      // Skip if no title or link
       if (!title || !link) return;
 
-      // Make link absolute
       const absoluteLink = link.startsWith('http') ? link : `https://pestoscope.com${link}`;
 
-      // Extract image - handle lazy loading and multiple sources
       let image: string | null = null;
       const $img = $article.find('img').first();
       if ($img.length) {
@@ -65,26 +59,18 @@ export async function GET() {
         }
       }
 
-      // Extract excerpt - try multiple content selectors
       const $excerpt = $article.find('.entry-content, .entry-summary, p').first();
       const excerpt = $excerpt.text().trim().substring(0, 200) || '';
 
-      // Extract author - check multiple patterns
       const $author = $article.find('.author a, .entry-author a, [rel="author"]');
       const author = $author.text().trim() || null;
 
-      // Extract date - look for time element or date meta
       const $date = $article.find('time, .entry-date, .posted-on');
-      let date: string | null = null;
-      if ($date.length) {
-        date = $date.attr('datetime') || $date.text().trim() || null;
-      }
+      const date = $date.length ? ($date.attr('datetime') || $date.text().trim() || null) : null;
 
-      // Extract category
       const $category = $article.find('.category a, .cat-links a').first();
       const category = $category.text().trim() || 'Pest Advisory';
 
-      // Generate ID from link
       const id = absoluteLink.split('/').filter(Boolean).pop() || `post-${index}`;
 
       posts.push({
@@ -99,15 +85,12 @@ export async function GET() {
       });
     });
 
-    const apiResponse: ApiResponse = {
+    return NextResponse.json({
       success: true,
       count: posts.length,
       data: posts,
-    };
-
-    return NextResponse.json(apiResponse);
+    });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
       {
         success: false,
