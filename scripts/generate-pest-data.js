@@ -273,6 +273,153 @@ async function fetchPestDetail(pest) {
   }
 }
 
+async function fetchAdvisoryDetail(advisory) {
+  console.log(`    📄 Fetching full content for: ${advisory.title}`);
+  
+  try {
+    const response = await fetch(advisory.link, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch: ${response.status}`);
+    }
+
+    const html = await response.text();
+    const $ = cheerio.load(html);
+
+    // Get full content
+    const $content = $('.entry-content, article .content, .post-content');
+    let fullContent = '';
+    
+    // Extract text paragraphs
+    $content.find('p').each((_, el) => {
+      const text = $(el).text().trim();
+      if (text) {
+        fullContent += text + '\n\n';
+      }
+    });
+
+    // Get all images from the post
+    const images = [];
+    const seenImages = new Set();
+    
+    $content.find('img').each((_, el) => {
+      let imgSrc = $(el).attr('src') || $(el).attr('data-src') || $(el).attr('data-lazy-src');
+      if (imgSrc && !imgSrc.includes('data:image') && !seenImages.has(imgSrc)) {
+        if (!imgSrc.startsWith('http')) {
+          imgSrc = `https://pestoscope.com${imgSrc.startsWith('/') ? '' : '/'}${imgSrc}`;
+        }
+        seenImages.add(imgSrc);
+        images.push(imgSrc);
+      }
+    });
+
+    console.log(`    ✅ Full content fetched (${fullContent.length} chars, ${images.length} images)`);
+    
+    return {
+      fullContent: fullContent.trim(),
+      images: images
+    };
+  } catch (error) {
+    console.error(`    ❌ Error fetching advisory details:`, error);
+    return {
+      fullContent: advisory.excerpt,
+      images: []
+    };
+  }
+}
+
+async function fetchAdvisories() {
+  console.log('\n📰 Fetching pest advisories...');
+  
+  try {
+    const response = await fetch('https://pestoscope.com/category/pest-advisory/', {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch: ${response.status}`);
+    }
+
+    const html = await response.text();
+    const $ = cheerio.load(html);
+    const posts = [];
+
+    $('article, .post, .entry').each((index, element) => {
+      if (posts.length >= 10) return;
+
+      const $article = $(element);
+
+      const $titleLink = $article.find('h2 a, h1 a, .entry-title a, a[rel="bookmark"]').first();
+      const title = $titleLink.text().trim();
+      const link = $titleLink.attr('href');
+
+      if (!title || !link) return;
+
+      const absoluteLink = link.startsWith('http') ? link : `https://pestoscope.com${link}`;
+
+      let image = null;
+      const $img = $article.find('img').first();
+      if ($img.length) {
+        const imgSrc = $img.attr('src') || $img.attr('data-src') || $img.attr('data-lazy-src');
+        if (imgSrc && !imgSrc.includes('data:image')) {
+          image = imgSrc.startsWith('http') ? imgSrc : `https://pestoscope.com${imgSrc}`;
+        }
+      }
+
+      const $excerpt = $article.find('.entry-content, .entry-summary, p').first();
+      const excerpt = $excerpt.text().trim().substring(0, 200) || '';
+
+      const $author = $article.find('.author a, .entry-author a, [rel="author"]');
+      const author = $author.text().trim() || null;
+
+      const $date = $article.find('time, .entry-date, .posted-on');
+      let date = null;
+      if ($date.length) {
+        date = $date.attr('datetime') || $date.text().trim() || null;
+      }
+
+      const $category = $article.find('.category a, .cat-links a').first();
+      const category = $category.text().trim() || 'Pest Advisory';
+
+      const id = absoluteLink.split('/').filter(Boolean).pop() || `post-${index}`;
+
+      posts.push({
+        id,
+        title,
+        image,
+        excerpt,
+        author,
+        date,
+        category,
+        link: absoluteLink,
+        fullContent: '',
+        images: []
+      });
+    });
+
+    console.log(`✅ Found ${posts.length} advisories`);
+    
+    // Fetch full content for each advisory
+    for (const post of posts) {
+      const detail = await fetchAdvisoryDetail(post);
+      post.fullContent = detail.fullContent;
+      post.images = detail.images.length > 0 ? detail.images : (post.image ? [post.image] : []);
+      await delay(500); // Rate limiting
+    }
+    
+    return posts;
+  } catch (error) {
+    console.error('❌ Error fetching advisories:', error);
+    return [];
+  }
+}
+
 async function generatePestData() {
   console.log('🚀 Starting pest data generation...\n');
   
@@ -293,9 +440,12 @@ async function generatePestData() {
     category.pests = pests;
   }
   
+  const advisories = await fetchAdvisories();
+  
   const pestData = {
     lastUpdated: new Date().toISOString(),
-    categories
+    categories,
+    advisories
   };
   
   const outputDir = path.join(path.dirname(__dirname), 'public', 'data');
@@ -312,6 +462,7 @@ async function generatePestData() {
   console.log(`📊 Stats:`);
   console.log(`   - Categories: ${categories.length}`);
   console.log(`   - Total Pests: ${categories.reduce((sum, cat) => sum + cat.pests.length, 0)}`);
+  console.log(`   - Advisories: ${advisories.length}`);
   console.log(`   - File Size: ${(fs.statSync(outputFile).size / 1024).toFixed(2)} KB`);
 }
 
